@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+    <channel>
+        <title>W3Schools Home Page</title>
+        <link>http://www.w3schools.com</link>
+        <description>Free web building tutorials</description>
+        <content:encoded><![CDATA[This is a <a href="http://example.com/">link</a>.]]</content:encoded>
+        <skipHours>
+            <hour>1</hour>
+            <hour>2</hour>
+        </skipHours>
+        <skipDays>
+            <day>1</day>
+            <day>2</day>
+        </skipDays>
+        <pubDate>Sat, 15 Aug 2015 09:54:05 +0000</pubDate>
+        <lastBuildDate>Sat, 16 Aug 2015 09:54:05 +0000</lastBuildDate>
+        <image>
+            <title>Test Image</title>
+            <description>test image...</description>
+            <url>http://localhost/image</url>
+            <guid>urn:uuid:1001</guid>
+        </image>
+        <item>
+            <title>RSS Tutorial</title>
+            <link>http://www.w3schools.com/webservices</link>
+            <description>New RSS tutorial on W3Schools</description>
+            <content:encoded><![CDATA[This is a <a href="http://example.com/">link</a>.]]</content:encoded>
+            <guid>urn:uuid:1002</guid>
+        </item>
+        <item>
+            <title>XML Tutorial</title>
+            <link>http://www.w3schools.com/xml</link>
+            <description>New XML tutorial on W3Schools</description>
+            <content:encoded><![CDATA[This is a <a href="http://example.com/">link</a>.]]</content:encoded>
+            <guid>urn:uuid:1003</guid>
+        </item>
+    </channel>
+</rss>

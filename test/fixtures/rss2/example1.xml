@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+  <channel>
+    <title>Example feed title</title>
+    <link>http://www.example.com</link>
+    <description>Example description</description>
+    <pubDate>Tue, 20 Oct 2015 12:30:00 +0000</pubDate>
+    <lastBuildDate>Tue, 20 Oct 2015 12:30:00 +0000</lastBuildDate>
+    <image>
+      <title>Example image title</title>
+      <description>Example image description...</description>
+      <url>http://www.example.com/image</url>
+      <guid>urn:uuid:1001</guid>
+    </image>
+    <item>
+      <title>Example item title</title>
+      <link>http://www.example.com/items/1.html</link>
+      <description>Example item description</description>
+      <pubDate>Tue, 20 Oct 2015 12:30:00 +0000</pubDate>
+      <guid>urn:uuid:763ba33d-bbbe-4025-9d6f-9a39d16b164e</guid>
+      <content:encoded><![CDATA[Example content with <a href="bla">link</a><p>my test <em>paragraph</em> is here.</p>]]></content:encoded>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title>Example feed title</title>
+  <link href="http://example.org/"/>
+  <updated>2003-12-13T18:30:02Z</updated>
+  <author>
+    <name>John Doe</name>
+  </author>
+  <id>urn:uuid:18f622d5-2f6a-4250-8e79-ddba87e4ecfd</id>
+
+  <entry>
+    <title>Example entry title</title>
+    <link href="http://example.com/entries/1.html"/>
+    <id>urn:uuid:1a7532cc-0a6f-44e8-b09f-3c1803d02d78</id>
+    <updated>2015-10-10T12:30:00Z</updated>
+    <summary>Example summary</summary>
+    <content type="html">Example content with &lt;a href=&quot;bla&quot;&gt;link&lt;/a&gt;&lt;p&gt;my test &lt;em&gt;paragraph&lt;/em&gt; is here.&lt;/p&gt;</content>
+  </entry>
+
+</feed>
