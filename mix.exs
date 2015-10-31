@@ -5,6 +5,7 @@ defmodule ElixirFeedParser.Mixfile do
     [app: :elixir_feed_parser,
      version: "0.0.1",
      elixir: "~> 1.0",
+     description: description,
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      deps: deps]
@@ -28,5 +29,18 @@ defmodule ElixirFeedParser.Mixfile do
   # Type `mix help deps` for more examples and options
   defp deps do
     []
+  end
+
+  defp description do
+    """
+    An Elixir Atom/RSS2 feed parser.
+    """
+  end
+
+  def package do
+    [
+      licenses: ["MIT"],
+      links: %{"GitHub" => "https://github.com/fdietz/elixir-feed-parser"}
+    ]
   end
 end
