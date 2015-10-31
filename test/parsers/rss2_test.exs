@@ -32,7 +32,7 @@ defmodule ElixirFeedParser.Test.RSS2Test do
 
   test "parse_entry", %{example1: example1} do
     feed = RSS2.parse(example1)
-    assert List.first(feed.entries) == %ElixirFeedParser.Entry{
+    assert List.first(feed.entries) == %{
       title: "Example item title",
       description: "Example item description",
       link: "http://www.example.com/items/1.html",

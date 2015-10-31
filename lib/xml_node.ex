@@ -17,7 +17,7 @@ defmodule ElixirFeedParser.XmlNode do
   end
 
   def children(node, selector) do
-    node |> xpath("//#{selector}")
+    node |> xpath("./#{selector}")
   end
 
   def attr(nil, _name), do: nil
@@ -36,7 +36,8 @@ defmodule ElixirFeedParser.XmlNode do
     node |> xpath("./text()") |> extract_text
   end
 
-  defp extract_text([]), do: ""
+  defp extract_text(nil), do: nil
+  defp extract_text([]), do: nil
   defp extract_text({:xmlText, _parents, _pos, _language, value, _type}) do
     List.to_string(value)
   end
@@ -44,6 +45,7 @@ defmodule ElixirFeedParser.XmlNode do
     "#{extract_text(head)}#{extract_text(tail)}"
   end
 
+  def xpath(nil, path), do: nil
   def xpath(node, path) do
     :xmerl_xpath.string(to_char_list(path), node)
   end

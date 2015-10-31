@@ -28,14 +28,4 @@ defmodule ElixirFeedParserTest do
     assert {:error, "Feed format unknown"} == result
   end
 
-  # TODO implement me
-  # test "parsing an invalid xml string" do
-  #   sample_xml = """
-  #   <unknown
-  #     <titl
-  #   </unknown>
-  #   """
-  #   result = ElixirFeedParser.parse(sample_xml)
-  #   assert {:error, "Feed format unknown"} == result
-  # end
 end

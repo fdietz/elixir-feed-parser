@@ -3,26 +3,6 @@ defmodule ElixirFeedParser do
   alias ElixirFeedParser.Parsers.Atom
   alias ElixirFeedParser.Parsers.RSS2
 
-  defmodule Feed do
-    defstruct author: nil,       # Atom
-              title: nil,        # Atom, RSS2
-              description: nil,  # RSS2
-              link: nil,         # Atom, RSS2
-              id: nil,           # Atom
-              updated: nil,      # Atom, RSS2 (pubDate)
-              entries: []
-  end
-
-  defmodule Entry do
-    defstruct title: nil,        # Atom, RSS2
-              link: nil,         # Atom, RSS2
-              description: nil,  # RSS2
-              id: nil,           # Atom, RSS2(guid)
-              updated: nil,      # Atom, RSS2(pubDate)
-              summary: nil,      # Atom
-              content: nil       # Atom, RSS2(content:encoded)
-  end
-
   def parse(xml_string) do
     XmlNode.parse_string(xml_string) |> determine_feed_parser |> parse_document
   end

@@ -1,7 +1,5 @@
 defmodule ElixirFeedParser.Parsers.RSS2 do
   alias ElixirFeedParser.XmlNode
-  alias ElixirFeedParser.Feed
-  alias ElixirFeedParser.Entry
 
   def can_parse?(xml) do
     xml
@@ -11,7 +9,7 @@ defmodule ElixirFeedParser.Parsers.RSS2 do
 
   def parse(xml) do
     feed = XmlNode.find(xml, "/rss/channel")
-    %Feed{
+    %{
       title:       feed |> XmlNode.find("title") |> XmlNode.text,
       description: feed |> XmlNode.find("description") |> XmlNode.text,
       link:        feed |> XmlNode.find("link") |> XmlNode.text,
@@ -25,7 +23,7 @@ defmodule ElixirFeedParser.Parsers.RSS2 do
   end
 
   defp parse_entry(entry) do
-    %Entry{
+    %{
       title:       entry |> XmlNode.find("title") |> XmlNode.text,
       description: entry |> XmlNode.find("description") |> XmlNode.text,
       link:        entry |> XmlNode.find("link") |> XmlNode.text,
