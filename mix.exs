@@ -6,6 +6,7 @@ defmodule ElixirFeedParser.Mixfile do
      version: "0.0.1",
      elixir: "~> 1.0",
      description: description,
+     package: package,
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      deps: deps]
@@ -37,8 +38,9 @@ defmodule ElixirFeedParser.Mixfile do
     """
   end
 
-  def package do
+  defp package do
     [
+      contributors: ["fdietz@gmail.com"],
       licenses: ["MIT"],
       links: %{"GitHub" => "https://github.com/fdietz/elixir-feed-parser"}
     ]
