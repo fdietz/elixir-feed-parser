@@ -6,8 +6,10 @@ defmodule ElixirFeedParser.Test.RSS2Test do
 
   setup do
     example1_file = File.read!("test/fixtures/rss2/example1.xml")
-    example1 = XmlNode.parse_string(example1_file)
-    {:ok, [example1: example1]}
+    example1 = XmlNode.parse_string(example1_file) |> RSS2.parse
+    example2_file = File.read!("test/fixtures/rss2/TenderLoveMaking.xml")
+    example2 = XmlNode.parse_string(example2_file) |> RSS2.parse
+    {:ok, [example1: example1, example2: example2]}
   end
 
   test "can_parse?" do
@@ -21,24 +23,51 @@ defmodule ElixirFeedParser.Test.RSS2Test do
     assert RSS2.can_parse?(xml)
   end
 
-  test "parse", %{example1: example1} do
-    feed = RSS2.parse(example1)
-    assert Enum.count(feed.entries) == 1
-    assert "Example feed title", feed.title
-    assert "Example description", feed.description
-    assert "http://example.com/", feed.link
-    assert "Tue, 20 Oct 2015 12:30:00 +000", feed.updated
+  test "parse title", %{example1: feed} do
+    assert "Example feed title" == feed.title
   end
 
-  test "parse_entry", %{example1: example1} do
-    feed = RSS2.parse(example1)
-    assert List.first(feed.entries) == %{
-      title: "Example item title",
-      description: "Example item description",
-      link: "http://www.example.com/items/1.html",
-      id: "urn:uuid:763ba33d-bbbe-4025-9d6f-9a39d16b164e",
-      updated: "Tue, 20 Oct 2015 12:30:00 +0000",
-      content: "Example content with <a href=\"bla\">link</a><p>my test <em>paragraph</em> is here.</p>"
-    }
+  test "parse description", %{example1: feed} do
+    assert "Example description" == feed.description
+  end
+
+  test "parse url", %{example1: feed} do
+    assert "http://www.example.com" == feed.url
+  end
+
+  test "parse updated", %{example1: feed} do
+    assert "Tue, 20 Oct 2015 12:30:00 +0000" == feed.updated
+  end
+
+  test "parse link as atom:link", %{example2: feed} do
+    assert "http://tenderlovemaking.com" == feed.url
+  end
+
+  test "parse generator", %{example2: feed} do
+    assert "http://wordpress.org/?v=2.7" == feed.generator
+  end
+
+  test "parse language", %{example2: feed} do
+    assert "en" == feed.language
+  end
+
+  test "parse skipHours as skip_hours", %{example1: feed} do
+    assert ["1", "2"] == feed.skip_hours
+  end
+
+  test "parse skipDays as skip_days", %{example1: feed} do
+    assert ["1", "2"] == feed.skip_days
+  end
+
+  test "parse image title", %{example1: feed} do
+    assert "Example image title" == feed.image.title
+  end
+
+  test "parse image description", %{example1: feed} do
+    assert "Example image description..." == feed.image.description
+  end
+
+  test "parse image url", %{example1: feed} do
+    assert "http://www.example.com/image" == feed.image.url
   end
 end
