@@ -1,4 +1,5 @@
 defmodule ElixirFeedParser.Parsers.Helper do
+  alias ElixirFeedParser.XmlNode
 
   # always take url if provided
   # if no feed_url link entry, take last link entry
@@ -13,4 +14,19 @@ defmodule ElixirFeedParser.Parsers.Helper do
   def parse_url(nil, links, feed_url), do: List.last(links -- [feed_url])
   def parse_url(url, _links, _feed_url), do: url
 
+  def element(node, selector) do
+    node |> XmlNode.find(selector) |> XmlNode.text
+  end
+
+  def element(node, selector, [attr: attr]) do
+    node |> XmlNode.find(selector) |> XmlNode.attr(attr)
+  end
+
+  def elements(node, selector) do
+    node |> XmlNode.map_children(selector, fn(e) -> XmlNode.text(e) end)
+  end
+
+  def elements(node, selector, [attr: attr]) do
+    node |> XmlNode.map_children(selector, fn(e) -> XmlNode.attr(e, attr) end)
+  end
 end

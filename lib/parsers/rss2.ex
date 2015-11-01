@@ -1,4 +1,5 @@
 defmodule ElixirFeedParser.Parsers.RSS2 do
+  import ElixirFeedParser.Parsers.Helper
   alias ElixirFeedParser.XmlNode
 
   def can_parse?(xml) do
@@ -10,32 +11,32 @@ defmodule ElixirFeedParser.Parsers.RSS2 do
   def parse(xml) do
     feed = XmlNode.find(xml, "/rss/channel")
 
-    link      = feed |> XmlNode.find("link") |> XmlNode.text
-    atom_link = feed |> XmlNode.find("atom:link[@rel='self']") |> XmlNode.attr("href")
+    link      = feed |> element("link")
+    atom_link = feed |> element("atom:link[@rel='self']", [attr: "href"])
     url       = link || atom_link
 
     %{
-      title:                 feed |> XmlNode.find("title") |> XmlNode.text,
-      description:           feed |> XmlNode.find("description") |> XmlNode.text,
+      title:                 feed |> element("title"),
+      description:           feed |> element("description"),
       url:                   url,
       "atom:link":           atom_link,
-      "rss2:link":           feed |> XmlNode.find("link") |> XmlNode.text,
-      language:              feed |> XmlNode.find("language") |> XmlNode.text,
-      copyright:             feed |> XmlNode.find("copyright") |> XmlNode.text,
-      "rss2:managingEditor": feed |> XmlNode.find("managingEditor") |> XmlNode.text,
-      "rss2:webMaster":      feed |> XmlNode.find("webMaster") |> XmlNode.text,
+      "rss2:link":           feed |> element("link"),
+      language:              feed |> element("language"),
+      copyright:             feed |> element("copyright"),
+      "rss2:managingEditor": feed |> element("managingEditor"),
+      "rss2:webMaster":      feed |> element("webMaster"),
       # TODO: also work with pubdate or publicationDate
-      updated:               feed |> XmlNode.find("pubDate") |> XmlNode.text,
-      "rss2:pubDate":        feed |> XmlNode.find("pubDate") |> XmlNode.text,
-      "rss2:lastBuildDate":  feed |> XmlNode.find("lastBuildDate") |> XmlNode.text,
-      categories:            feed |> XmlNode.map_children("category", fn(e) -> XmlNode.text(e) end),
-      generator:             feed |> XmlNode.find("generator") |> XmlNode.text,
-      "rss2:ttl":            feed |> XmlNode.find("ttl") |> XmlNode.text,
+      updated:               feed |> element("pubDate"),
+      "rss2:pubDate":        feed |> element("pubDate"),
+      "rss2:lastBuildDate":  feed |> element("lastBuildDate"),
+      categories:            feed |> elements("category"),
+      generator:             feed |> element("generator"),
+      "rss2:ttl":            feed |> element("ttl"),
       # TODO: integer
-      skip_hours:            feed |> XmlNode.map_children("skipHours/hour", fn(e) -> XmlNode.text(e) end),
-      "rss2:skipHours":      feed |> XmlNode.map_children("skipHours/hour", fn(e) -> XmlNode.text(e) end),
-      skip_days:             feed |> XmlNode.map_children("skipDays/day", fn(e) -> XmlNode.text(e) end),
-      "rss2:skipDays":       feed |> XmlNode.map_children("skipDays/day", fn(e) -> XmlNode.text(e) end),
+      skip_hours:            feed |> elements("skipHours/hour"),
+      "rss2:skipHours":      feed |> elements("skipHours/hour"),
+      skip_days:             feed |> elements("skipDays/day"),
+      "rss2:skipDays":       feed |> elements("skipDays/day"),
 
       image:                 feed |> XmlNode.find("image") |> parse_image,
       entries:               parse_entries(feed)
@@ -45,12 +46,12 @@ defmodule ElixirFeedParser.Parsers.RSS2 do
   defp parse_image(nil), do: nil
   defp parse_image(image) do
     %{
-      title:       image |> XmlNode.find("title") |> XmlNode.text,
-      link:        image |> XmlNode.find("link") |> XmlNode.text,
-      url:         image |> XmlNode.find("url") |> XmlNode.text,
-      width:       image |> XmlNode.find("width") |> XmlNode.text,
-      height:      image |> XmlNode.find("height") |> XmlNode.text,
-      description: image |> XmlNode.find("description") |> XmlNode.text
+      title:       image |> element("title"),
+      link:        image |> element("link"),
+      url:         image |> element("url"),
+      width:       image |> element("width"),
+      height:      image |> element("height"),
+      description: image |> element("description")
     }
   end
 
@@ -59,25 +60,25 @@ defmodule ElixirFeedParser.Parsers.RSS2 do
   end
 
   defp parse_entry(entry) do
-    author     = entry |> XmlNode.find("author") |> XmlNode.text
-    dc_creator = entry |> XmlNode.find("dc:creator") |> XmlNode.text
+    author     = entry |> element("author")
+    dc_creator = entry |> element("dc:creator")
 
     %{
-      title:          entry |> XmlNode.find("title") |> XmlNode.text,
-      url:            entry |> XmlNode.find("link") |> XmlNode.text,
-      "rss2:link":    entry |> XmlNode.find("link") |> XmlNode.text,
-      description:    entry |> XmlNode.find("description") |> XmlNode.text,
+      title:          entry |> element("title"),
+      url:            entry |> element("link"),
+      "rss2:link":    entry |> element("link"),
+      description:    entry |> element("description"),
       author:         author || dc_creator,
-      "rss2:dc:creator": entry |> XmlNode.find("dc:creator") |> XmlNode.text,
-      categories:     entry |> XmlNode.map_children("category", fn(e) -> XmlNode.text(e) end),
-      id:             entry |> XmlNode.find("guid") |> XmlNode.text,
-      "rss2:guid":    entry |> XmlNode.find("guid") |> XmlNode.text,
-      comments:       entry |> XmlNode.find("comments") |> XmlNode.text,
+      "rss2:dc:creator": entry |> element("dc:creator"),
+      categories:     entry |> elements("category"),
+      id:             entry |> element("guid"),
+      "rss2:guid":    entry |> element("guid"),
+      comments:       entry |> element("comments"),
       # TODO: also work with pubdate or publicationDate, dc:date, dc:Date, dcterms:created
-      updated:        entry |> XmlNode.find("pubDate") |> XmlNode.text,
-      "rss2:pubDate": entry |> XmlNode.find("pubDate") |> XmlNode.text,
-      source:         entry |> XmlNode.find("source") |> XmlNode.attr("url"),
-      content:        entry |> XmlNode.find("content:encoded") |> XmlNode.text,
+      updated:        entry |> element("pubDate"),
+      "rss2:pubDate": entry |> element("pubDate"),
+      source:         entry |> element("source", [attr: "url"]),
+      content:        entry |> element("content:encoded"),
       enclosure:      entry |> XmlNode.find("enclosure") |> parse_enclosure
     }
   end

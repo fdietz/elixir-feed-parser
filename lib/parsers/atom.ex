@@ -12,19 +12,19 @@ defmodule ElixirFeedParser.Parsers.Atom do
   def parse(xml) do
     feed = XmlNode.find(xml, "/feed")
 
-    url      = feed |> XmlNode.find("link[@type='text/html']") |> XmlNode.attr("href")
-    links    = feed |> XmlNode.map_children("link", fn(e) -> XmlNode.attr(e, "href") end)
-    feed_url = feed |> XmlNode.find("link[@rel='self']") |> XmlNode.attr("href")
-    hubs     = feed |> XmlNode.map_children("link[@rel='hub']", fn(e) -> XmlNode.attr(e, "href") end)
+    url      = feed |> element("link[@type='text/html']", [attr: "href"])
+    links    = feed |> elements("link", [attr: "href"])
+    feed_url = feed |> element("link[@rel='self']", [attr: "href"])
+    hubs     = feed |> elements("link[@rel='hub']", [attr: "href"])
 
     %{
-      authors:         feed |> XmlNode.map_children("author/name", fn(e) -> XmlNode.text(e) end),
-      title:           feed |> XmlNode.find("title") |> XmlNode.text,
-      id:              feed |> XmlNode.find("id") |> XmlNode.text,
+      authors:         feed |> elements("author/name"),
+      title:           feed |> element("title"),
+      id:              feed |> element("id"),
 
       # TODO: handle type attr text/html/xhtml correctly
-      description:     feed |> XmlNode.find("subtitle") |> XmlNode.text,
-      "atom:subtitle": feed |> XmlNode.find("subtitle") |> XmlNode.text,
+      description:     feed |> element("subtitle"),
+      "atom:subtitle": feed |> element("subtitle"),
 
       links:           links,
       url:             parse_url(url, links, feed_url),
@@ -32,14 +32,13 @@ defmodule ElixirFeedParser.Parsers.Atom do
       feed_url:        feed_url,
 
       # TODO: add optional scheme and label attributes
-      categories:      feed |> XmlNode.map_children("category", fn(e) -> XmlNode.attr(e, "term") end),
-      contributors:    feed |> XmlNode.map_children("contributor/name", fn(e) -> XmlNode.text(e) end),
-      updated:         feed |> XmlNode.find("updated") |> XmlNode.text,
-
-      generator:       feed |> XmlNode.find("generator") |> XmlNode.attr("uri"),
-      icon:            feed |> XmlNode.find("icon") |> XmlNode.text,
-      logo:            feed |> XmlNode.find("logo") |> XmlNode.text,
-      rights:          feed |> XmlNode.find("rights") |> XmlNode.text,
+      categories:      feed |> elements("category", [attr: "term"]),
+      contributors:    feed |> elements("contributor/name"),
+      updated:         feed |> element("updated"),
+      generator:       feed |> element("generator", [attr: "uri"]),
+      icon:            feed |> element("icon"),
+      logo:            feed |> element("logo"),
+      rights:          feed |> element("rights"),
 
       entries:         parse_entries(feed)
     }
@@ -50,29 +49,29 @@ defmodule ElixirFeedParser.Parsers.Atom do
   end
 
   defp parse_entry(entry) do
-    url      = entry |> XmlNode.find("link[@type='text/html']") |> XmlNode.attr("href")
-    links    = entry |> XmlNode.map_children("link", fn(e) -> XmlNode.attr(e, "href") end)
+    url      = entry |> element("link[@type='text/html']")
+    links    = entry |> elements("link", [attr: "href"])
 
     %{
-      authors:      entry |> XmlNode.map_children("author/name", fn(e) -> XmlNode.text(e) end),
-      id:           entry |> XmlNode.find("id") |> XmlNode.text,
-      title:        entry |> XmlNode.find("title") |> XmlNode.text,
-      updated:      entry |> XmlNode.find("updated") |> XmlNode.text,
-      published:    entry |> XmlNode.find("published") |> XmlNode.text,
+      authors:      entry |> elements("author/name"),
+      id:           entry |> element("id"),
+      title:        entry |> element("title"),
+      updated:      entry |> element("updated"),
+      published:    entry |> element("published"),
 
       # TODO: add optional scheme and label attributes
-      categories:   entry |> XmlNode.map_children("category", fn(e) -> XmlNode.attr(e, "term") end),
-      contributors: entry |> XmlNode.map_children("contributor/name", fn(e) -> XmlNode.text(e) end),
+      categories:   entry |> elements("category", [attr: "term"]),
+      contributors: entry |> elements("contributor/name"),
 
-      generator:    entry |> XmlNode.find("generator") |> XmlNode.attr("uri"),
-      rights:       entry |> XmlNode.find("rights") |> XmlNode.text,
-      source:       entry |> XmlNode.find("source") |> XmlNode.text,
+      generator:    entry |> element("generator", [attr: "uri"]),
+      rights:       entry |> element("rights"),
+      source:       entry |> element("source"),
 
       links:        links,
       url:          parse_url(url, links),
 
-      summary:      entry |> XmlNode.find("summary") |> XmlNode.text,
-      content:      entry |> XmlNode.find("content") |> XmlNode.text
+      summary:      entry |> element("summary"),
+      content:      entry |> element("content")
     }
   end
 
