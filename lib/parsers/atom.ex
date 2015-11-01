@@ -17,6 +17,9 @@ defmodule ElixirFeedParser.Parsers.Atom do
     feed_url = feed |> element("link[@rel='self']", [attr: "href"])
     hubs     = feed |> elements("link[@rel='hub']", [attr: "href"])
 
+    feed_burner_feed_url = feed |> element("link[@type='application/atom+xml']", [attr: "href"])
+    feed_burner_hubs     = feed |> elements("atom10:link[@rel='hub']", [attr: "href"])
+
     %{
       authors:         feed |> elements("author/name"),
       title:           feed |> element("title"),
@@ -28,8 +31,8 @@ defmodule ElixirFeedParser.Parsers.Atom do
 
       links:           links,
       url:             parse_url(url, links, feed_url),
-      hubs:            hubs,
-      feed_url:        feed_url,
+      hubs:            parse_hubs(hubs, feed_burner_hubs),
+      feed_url:        feed_burner_feed_url || feed_url,
 
       # TODO: add optional scheme and label attributes
       categories:      feed |> elements("category", [attr: "term"]),
@@ -49,8 +52,10 @@ defmodule ElixirFeedParser.Parsers.Atom do
   end
 
   defp parse_entry(entry) do
-    url      = entry |> element("link[@type='text/html']")
-    links    = entry |> elements("link", [attr: "href"])
+    url           = entry |> element("link[@type='text/html']")
+    links         = entry |> elements("link", [attr: "href"])
+    enclosure     = entry |> element("enclosure", [attr: "href"])
+    media_content = entry |> element("media:content", [attr: "url"])
 
     %{
       authors:      entry |> elements("author/name"),
@@ -70,6 +75,7 @@ defmodule ElixirFeedParser.Parsers.Atom do
       links:        links,
       url:          parse_url(url, links),
 
+      image:        enclosure || media_content,
       summary:      entry |> element("summary"),
       content:      entry |> element("content")
     }
