@@ -24,6 +24,7 @@ defmodule ElixirFeedParser.Parsers.RSS2 do
       copyright:             feed |> XmlNode.find("copyright") |> XmlNode.text,
       "rss2:managingEditor": feed |> XmlNode.find("managingEditor") |> XmlNode.text,
       "rss2:webMaster":      feed |> XmlNode.find("webMaster") |> XmlNode.text,
+      # TODO: also work with pubdate or publicationDate
       updated:               feed |> XmlNode.find("pubDate") |> XmlNode.text,
       "rss2:pubDate":        feed |> XmlNode.find("pubDate") |> XmlNode.text,
       "rss2:lastBuildDate":  feed |> XmlNode.find("lastBuildDate") |> XmlNode.text,
@@ -72,6 +73,7 @@ defmodule ElixirFeedParser.Parsers.RSS2 do
       id:             entry |> XmlNode.find("guid") |> XmlNode.text,
       "rss2:guid":    entry |> XmlNode.find("guid") |> XmlNode.text,
       comments:       entry |> XmlNode.find("comments") |> XmlNode.text,
+      # TODO: also work with pubdate or publicationDate, dc:date, dc:Date, dcterms:created
       updated:        entry |> XmlNode.find("pubDate") |> XmlNode.text,
       "rss2:pubDate": entry |> XmlNode.find("pubDate") |> XmlNode.text,
       source:         entry |> XmlNode.find("source") |> XmlNode.attr("url"),

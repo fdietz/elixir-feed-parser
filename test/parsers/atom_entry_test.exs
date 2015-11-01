@@ -23,58 +23,58 @@ defmodule ElixirFeedParser.Test.AtomEntryTest do
 
 
   test "parse authors", %{example1: entry} do
-    assert ["John Doe", "Ms. Penny"] == entry.authors
+    assert entry.authors == ["John Doe", "Ms. Penny"]
   end
 
   test "parse id", %{example1: entry} do
-    assert "urn:uuid:1a7532cc-0a6f-44e8-b09f-3c1803d02d78" == entry.id
+    assert entry.id == "urn:uuid:1a7532cc-0a6f-44e8-b09f-3c1803d02d78"
   end
 
   test "parse title", %{example1: entry} do
-    assert "Example entry title" == entry.title
+    assert entry.title == "Example entry title"
   end
 
   test "parse updated", %{example1: entry} do
-    assert "2015-10-10T12:30:00Z" == entry.updated
+    assert entry.updated == "2015-10-10T12:30:00Z"
   end
 
   test "parse published", %{example1: entry} do
-    assert "2015-10-09T12:30:00Z" == entry.published
+    assert entry.published == "2015-10-09T12:30:00Z"
   end
 
   test "parse summary", %{example1: entry} do
-    assert "Example summary" == entry.summary
+    assert entry.summary == "Example summary"
   end
 
   test "parse category", %{example1: entry} do
-    assert ["vacation", "travel"] == entry.categories
+    assert entry.categories == ["vacation", "travel"]
   end
 
   test "parse contributors", %{example1: entry} do
-    assert ["Jane Doe", "Mr. Smith"] == entry.contributors
+    assert entry.contributors == ["Jane Doe", "Mr. Smith"]
   end
 
   test "parse generator", %{example1: entry} do
-    assert "http://example.org/atom" == entry.generator
+    assert entry.generator == "http://example.org/atom"
   end
 
   test "parse rights", %{example1: entry} do
-    assert "MIT License" == entry.rights
+    assert entry.rights == "MIT License"
   end
 
   test "parse source", %{example1: entry} do
-    assert "http://example-original.com/entries/1.html" == entry.source
+    assert entry.source == "http://example-original.com/entries/1.html"
   end
 
   test "parse url", %{example2: entry} do
-    assert "http://aws.typepad.com/aws/2009/01/aws-job-architect-designer-position-in-turkey.html" == entry.url
+    assert entry.url == "http://aws.typepad.com/aws/2009/01/aws-job-architect-designer-position-in-turkey.html"
   end
 
   test "parse url if does not have type 'text/html' attribute", %{example3: entry} do
-    assert "http://www.innoq.com/blog/phaus/2009/07/ja.html" ==  entry.url
+    assert entry.url == "http://www.innoq.com/blog/phaus/2009/07/ja.html"
   end
 
   test "parse content", %{example1: entry} do
-    assert "Example content with <a href=\"bla\">link</a><p>my test <em>paragraph</em> is here.</p>" == entry.content
+    assert entry.content == "Example content with <a href=\"bla\">link</a><p>my test <em>paragraph</em> is here.</p>"
   end
 end

@@ -6,19 +6,19 @@ defmodule XmlNodeTest do
   test "parsing an element with text" do
     sample_xml = "<title>test title</title>"
     xml = XmlNode.parse_string(sample_xml)
-    assert "test title" == XmlNode.find(xml, "/title") |> XmlNode.text
+    assert XmlNode.find(xml, "/title") |> XmlNode.text == "test title"
   end
 
   test "parsing an element with colon name" do
     sample_xml = "<content:encoded>test title</content:encoded>"
     xml = XmlNode.parse_string(sample_xml)
-    assert "test title" == XmlNode.find(xml, "/content:encoded") |> XmlNode.text
+    assert XmlNode.find(xml, "/content:encoded") |> XmlNode.text == "test title"
   end
 
   test "parsing an element with a CDATA section" do
     sample_xml = "<content><![CDATA[<div>Hello</div>]]></content>"
     xml = XmlNode.parse_string(sample_xml)
-    assert "<div>Hello</div>" == XmlNode.find(xml, "/content") |> XmlNode.text
+    assert XmlNode.find(xml, "/content") |> XmlNode.text == "<div>Hello</div>"
   end
 
   # TODO: implement me
@@ -35,7 +35,7 @@ defmodule XmlNodeTest do
     <content type="text">test</content>
     """
     xml = XmlNode.parse_string(sample_xml)
-    assert "text" == XmlNode.find(xml, "/content") |> XmlNode.attr("type")
+    assert XmlNode.find(xml, "/content") |> XmlNode.attr("type") == "text"
   end
 
   test "parsing nested elements" do
@@ -47,7 +47,7 @@ defmodule XmlNodeTest do
     </feed>
     """
     xml = XmlNode.parse_string(sample_xml)
-    assert "John Doe" == XmlNode.find(xml, "/feed/author/name") |> XmlNode.text
+    assert XmlNode.find(xml, "/feed/author/name") |> XmlNode.text == "John Doe"
   end
 
   test "parsing xml namespace" do
@@ -56,7 +56,7 @@ defmodule XmlNodeTest do
     </feed>
     """
     xml = XmlNode.parse_string(sample_xml)
-    assert "http://www.w3.org/2005/Atom" == XmlNode.find(xml, "/feed") |> XmlNode.namespace()
+    assert XmlNode.find(xml, "/feed") |> XmlNode.namespace() == "http://www.w3.org/2005/Atom"
   end
 
   test "parsing list of entry elements" do
@@ -73,7 +73,7 @@ defmodule XmlNodeTest do
     xml = XmlNode.parse_string(sample_xml)
 
     titles = XmlNode.map_children(xml, "entry/title", fn(e) -> XmlNode.text(e) end)
-    assert ["Example title 1", "Example title 2"] ==  titles
+    assert titles == ["Example title 1", "Example title 2"]
   end
 
 end

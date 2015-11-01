@@ -23,7 +23,7 @@ defmodule ElixirFeedParser.Parsers.Atom do
       id:              feed |> XmlNode.find("id") |> XmlNode.text,
 
       # TODO: handle type attr text/html/xhtml correctly
-      description:     feed   |> XmlNode.find("subtitle") |> XmlNode.text,
+      description:     feed |> XmlNode.find("subtitle") |> XmlNode.text,
       "atom:subtitle": feed |> XmlNode.find("subtitle") |> XmlNode.text,
 
       links:           links,

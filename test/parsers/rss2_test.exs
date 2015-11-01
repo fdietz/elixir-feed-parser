@@ -24,50 +24,50 @@ defmodule ElixirFeedParser.Test.RSS2Test do
   end
 
   test "parse title", %{example1: feed} do
-    assert "Example feed title" == feed.title
+    assert feed.title == "Example feed title"
   end
 
   test "parse description", %{example1: feed} do
-    assert "Example description" == feed.description
+    assert feed.description == "Example description"
   end
 
   test "parse url", %{example1: feed} do
-    assert "http://www.example.com" == feed.url
+    assert feed.url == "http://www.example.com"
   end
 
   test "parse updated", %{example1: feed} do
-    assert "Tue, 20 Oct 2015 12:30:00 +0000" == feed.updated
+    assert feed.updated == "Tue, 20 Oct 2015 12:30:00 +0000"
   end
 
   test "parse link as atom:link", %{example2: feed} do
-    assert "http://tenderlovemaking.com" == feed.url
+    assert feed.url == "http://tenderlovemaking.com"
   end
 
   test "parse generator", %{example2: feed} do
-    assert "http://wordpress.org/?v=2.7" == feed.generator
+    assert feed.generator == "http://wordpress.org/?v=2.7"
   end
 
   test "parse language", %{example2: feed} do
-    assert "en" == feed.language
+    assert feed.language == "en"
   end
 
   test "parse skipHours as skip_hours", %{example1: feed} do
-    assert ["1", "2"] == feed.skip_hours
+    assert feed.skip_hours == ["1", "2"]
   end
 
   test "parse skipDays as skip_days", %{example1: feed} do
-    assert ["1", "2"] == feed.skip_days
+    assert feed.skip_days == ["1", "2"]
   end
 
   test "parse image title", %{example1: feed} do
-    assert "Example image title" == feed.image.title
+    assert feed.image.title == "Example image title"
   end
 
   test "parse image description", %{example1: feed} do
-    assert "Example image description..." == feed.image.description
+    assert feed.image.description == "Example image description..."
   end
 
   test "parse image url", %{example1: feed} do
-    assert "http://www.example.com/image" == feed.image.url
+    assert feed.image.url == "http://www.example.com/image"
   end
 end
