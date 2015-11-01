@@ -16,6 +16,7 @@ defmodule ElixirFeedParser.Parsers.Helper do
 
   def parse_hubs(hubs, nil), do: hubs
   def parse_hubs(nil, feed_burner_hubs), do: feed_burner_hubs
+  def parse_hubs([nil], feed_burner_hubs), do: feed_burner_hubs
   def parse_hubs(hubs, feed_burner_hubs), do: hubs ++ feed_burner_hubs
 
   def element(node, selector) do

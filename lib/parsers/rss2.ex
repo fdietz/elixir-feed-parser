@@ -15,10 +15,13 @@ defmodule ElixirFeedParser.Parsers.RSS2 do
     atom_link = feed |> element("atom:link[@rel='self']", [attr: "href"])
     url       = link || atom_link
 
+    feed_burner_hubs = feed |> elements("atom10:link[@rel='hub']", [attr: "href"])
+
     %{
       title:                 feed |> element("title"),
       description:           feed |> element("description"),
       url:                   url,
+      hubs:                  parse_hubs([atom_link], feed_burner_hubs),
       "atom:link":           atom_link,
       "rss2:link":           feed |> element("link"),
       language:              feed |> element("language"),
