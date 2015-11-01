@@ -30,7 +30,7 @@ defmodule ElixirFeedParser.Parsers.Atom do
       "atom:subtitle": feed |> element("subtitle"),
 
       links:           links,
-      url:             parse_url(url, links, feed_url),
+      url:             parse_feed_url(url, links, feed_url),
       hubs:            parse_hubs(hubs, feed_burner_hubs),
       feed_url:        feed_burner_feed_url || feed_url,
 
@@ -57,6 +57,8 @@ defmodule ElixirFeedParser.Parsers.Atom do
     enclosure     = entry |> element("enclosure", [attr: "href"])
     media_content = entry |> element("media:content", [attr: "url"])
 
+    feed_burner_original_link = entry |> element("feedburner:origLink", [attr: "url"])
+
     %{
       authors:      entry |> elements("author/name"),
       id:           entry |> element("id"),
@@ -73,7 +75,7 @@ defmodule ElixirFeedParser.Parsers.Atom do
       source:       entry |> element("source"),
 
       links:        links,
-      url:          parse_url(url, links),
+      url:          parse_entry_url(feed_burner_original_link, url, links),
 
       image:        enclosure || media_content,
       summary:      entry |> element("summary"),

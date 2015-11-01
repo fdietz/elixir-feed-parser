@@ -66,14 +66,18 @@ defmodule ElixirFeedParser.Parsers.RSS2 do
     author     = entry |> element("author")
     dc_creator = entry |> element("dc:creator")
 
+    link = entry |> element("link")
+    feed_burner_original_link = entry |> element("feedburner:origLink", [attr: "url"])
+
     %{
       title:          entry |> element("title"),
-      url:            entry |> element("link"),
+      url:            parse_entry_url(feed_burner_original_link, link, nil),
       "rss2:link":    entry |> element("link"),
       description:    entry |> element("description"),
       author:         author || dc_creator,
       "rss2:dc:creator": entry |> element("dc:creator"),
       categories:     entry |> elements("category"),
+      # support dc:identifier too
       id:             entry |> element("guid"),
       "rss2:guid":    entry |> element("guid"),
       comments:       entry |> element("comments"),
