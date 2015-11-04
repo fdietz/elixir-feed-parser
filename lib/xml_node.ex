@@ -26,7 +26,7 @@ defmodule ElixirFeedParser.XmlNode do
   end
 
   defp extract_attr(nil), do: nil
-  defp extract_attr([]), do: []
+  defp extract_attr([]), do: nil
   defp extract_attr([{:xmlAttribute, _name, _expanded_name, _nsinfo, _namespace, _parents, _pos, _language, value, _normalized}]) do
     List.to_string(value)
   end
@@ -53,6 +53,15 @@ defmodule ElixirFeedParser.XmlNode do
   def namespace(nil), do: nil
   def namespace({:xmlElement, _name, _expanded_name, _nsinfo, {:xmlNamespace, default, _nodes}, _parents, _pos, _attributes, _content, _language, _xmlbase, _elementdef}) do
     Atom.to_string(default)
+  end
+
+  def namespaces({:xmlElement, _name, _expanded_name, _nsinfo, {:xmlNamespace, default, nodes}, _parents, _pos, _attributes, _content, _language, _xmlbase, _elementdef}) do
+    result = Enum.map(nodes, fn(n) ->
+      {key, value} = n;
+      {List.to_string(key), Atom.to_string(value)}
+    end)
+
+    Enum.into(result, HashDict.new)
   end
 
 end

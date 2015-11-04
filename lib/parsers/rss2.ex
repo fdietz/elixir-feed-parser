@@ -15,13 +15,11 @@ defmodule ElixirFeedParser.Parsers.RSS2 do
     atom_link = feed |> element("atom:link[@rel='self']", [attr: "href"])
     url       = link || atom_link
 
-    feed_burner_hubs = feed |> elements("atom10:link[@rel='hub']", [attr: "href"])
-
     %{
       title:                 feed |> element("title"),
       description:           feed |> element("description"),
       url:                   url,
-      hubs:                  parse_hubs([atom_link], feed_burner_hubs),
+      hubs:                  hubs(feed),
       "atom:link":           atom_link,
       "rss2:link":           feed |> element("link"),
       language:              feed |> element("language"),
@@ -46,6 +44,17 @@ defmodule ElixirFeedParser.Parsers.RSS2 do
     }
   end
 
+  defp hubs(feed) do
+    case feed_burner_namespace?(feed) do
+      true  -> feed |> elements("atom10:link[@rel='hub']", [attr: "href"])
+      false -> [feed |> element("atom:link[@rel='self']", [attr: "href"])]
+    end
+  end
+
+  def feed_burner_namespace?(feed) do
+    XmlNode.namespaces(feed)["feedburner"] == "http://rssnamespace.org/feedburner/ext/1.0"
+  end
+
   defp parse_image(nil), do: nil
   defp parse_image(image) do
     %{
@@ -58,20 +67,17 @@ defmodule ElixirFeedParser.Parsers.RSS2 do
     }
   end
 
-  defp parse_entries(xml) do
-    XmlNode.map_children(xml, "item", fn(e) -> parse_entry(e) end)
+  defp parse_entries(feed) do
+    XmlNode.map_children(feed, "item", fn(e) -> parse_entry(feed, e) end)
   end
 
-  defp parse_entry(entry) do
+  defp parse_entry(feed, entry) do
     author     = entry |> element("author")
     dc_creator = entry |> element("dc:creator")
 
-    link = entry |> element("link")
-    feed_burner_original_link = entry |> element("feedburner:origLink", [attr: "url"])
-
     %{
       title:          entry |> element("title"),
-      url:            parse_entry_url(feed_burner_original_link, link, nil),
+      url:            feed_entry_url(feed, entry),
       "rss2:link":    entry |> element("link"),
       description:    entry |> element("description"),
       author:         author || dc_creator,
@@ -88,6 +94,16 @@ defmodule ElixirFeedParser.Parsers.RSS2 do
       content:        entry |> element("content:encoded"),
       enclosure:      entry |> XmlNode.find("enclosure") |> parse_enclosure
     }
+  end
+
+  defp feed_entry_url(feed, entry) do
+    link = entry |> element("link")
+    feed_burner_original_link = entry |> element("feedburner:origLink", [attr: "url"])
+
+    case feed_burner_namespace?(feed) do
+      true  -> feed_burner_original_link
+      false -> link
+    end
   end
 
   defp parse_enclosure(nil), do: nil

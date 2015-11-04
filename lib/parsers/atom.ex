@@ -15,10 +15,6 @@ defmodule ElixirFeedParser.Parsers.Atom do
     url      = feed |> element("link[@type='text/html']", [attr: "href"])
     links    = feed |> elements("link", [attr: "href"])
     feed_url = feed |> element("link[@rel='self']", [attr: "href"])
-    hubs     = feed |> elements("link[@rel='hub']", [attr: "href"])
-
-    feed_burner_feed_url = feed |> element("link[@type='application/atom+xml']", [attr: "href"])
-    feed_burner_hubs     = feed |> elements("atom10:link[@rel='hub']", [attr: "href"])
 
     %{
       authors:         feed |> elements("author/name"),
@@ -31,8 +27,8 @@ defmodule ElixirFeedParser.Parsers.Atom do
 
       links:           links,
       url:             parse_feed_url(url, links, feed_url),
-      hubs:            parse_hubs(hubs, feed_burner_hubs),
-      feed_url:        feed_burner_feed_url || feed_url,
+      hubs:            hubs(feed),
+      feed_url:        feed_url(feed),
 
       # TODO: add optional scheme and label attributes
       categories:      feed |> elements("category", [attr: "term"]),
@@ -47,17 +43,40 @@ defmodule ElixirFeedParser.Parsers.Atom do
     }
   end
 
-  defp parse_entries(xml) do
-    XmlNode.map_children(xml, "entry", fn(e) -> parse_entry(e) end)
+  # always take url if provided
+  # otherwise take last link entry - the feed_url link entry
+  # if no feed_url link entry, take last link entry
+  defp parse_feed_url(url, [], nil), do: url
+  defp parse_feed_url(nil, links, nil), do: List.last(links)
+  defp parse_feed_url(nil, links, feed_url), do: List.last(links -- [feed_url])
+  defp parse_feed_url(url, _links, _feed_url), do: url
+
+  defp hubs(feed) do
+    case feed_burner_namespace?(feed) do
+      true  -> feed |> elements("atom10:link[@rel='hub']", [attr: "href"])
+      false -> feed |> elements("link[@rel='hub']", [attr: "href"])
+    end
   end
 
-  defp parse_entry(entry) do
-    url           = entry |> element("link[@type='text/html']")
+  defp feed_url(feed) do
+    case feed_burner_namespace?(feed) do
+      true  -> feed |> element("link[@type='application/atom+xml']", [attr: "href"])
+      false -> feed |> element("link[@rel='self']", [attr: "href"])
+    end
+  end
+
+  def feed_burner_namespace?(feed) do
+    XmlNode.namespaces(feed)["feedburner"] == "http://rssnamespace.org/feedburner/ext/1.0"
+  end
+
+  defp parse_entries(feed) do
+    XmlNode.map_children(feed, "entry", fn(e) -> parse_entry(feed, e) end)
+  end
+
+  defp parse_entry(feed, entry) do
     links         = entry |> elements("link", [attr: "href"])
     enclosure     = entry |> element("enclosure", [attr: "href"])
     media_content = entry |> element("media:content", [attr: "url"])
-
-    feed_burner_original_link = entry |> element("feedburner:origLink", [attr: "url"])
 
     %{
       authors:      entry |> elements("author/name"),
@@ -75,12 +94,23 @@ defmodule ElixirFeedParser.Parsers.Atom do
       source:       entry |> element("source"),
 
       links:        links,
-      url:          parse_entry_url(feed_burner_original_link, url, links),
+      url:          feed_entry_url(feed, entry),
 
       image:        enclosure || media_content,
       summary:      entry |> element("summary"),
       content:      entry |> element("content")
     }
+  end
+
+  defp feed_entry_url(feed, entry) do
+    url    = entry |> element("link[@type='text/html']")
+    links  = entry |> elements("link", [attr: "href"])
+    fb_url = entry |> element("feedburner:origLink", [attr: "url"])
+
+    case feed_burner_namespace?(feed) do
+      true  -> fb_url
+      false -> if url do url else List.last(links) end
+    end
   end
 
 end
