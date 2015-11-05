@@ -43,6 +43,35 @@ defmodule ElixirFeedParser.Parsers.Atom do
     }
   end
 
+  def parse_entry(feed, entry) do
+    links         = entry |> elements("link", [attr: "href"])
+    enclosure     = entry |> element("enclosure", [attr: "href"])
+    media_content = entry |> element("media:content", [attr: "url"])
+
+    %{
+      authors:      entry |> elements("author/name"),
+      id:           entry |> element("id"),
+      title:        entry |> element("title"),
+      updated:      entry |> element("updated"),
+      published:    entry |> element("published"),
+
+      # TODO: add optional scheme and label attributes
+      categories:   entry |> elements("category", [attr: "term"]),
+      contributors: entry |> elements("contributor/name"),
+
+      generator:    entry |> element("generator", [attr: "uri"]),
+      rights:       entry |> element("rights"),
+      source:       entry |> element("source"),
+
+      links:        links,
+      url:          feed_entry_url(feed, entry),
+
+      image:        enclosure || media_content,
+      summary:      entry |> element("summary"),
+      content:      entry |> element("content")
+    }
+  end
+
   # always take url if provided
   # otherwise take last link entry - the feed_url link entry
   # if no feed_url link entry, take last link entry
@@ -71,35 +100,6 @@ defmodule ElixirFeedParser.Parsers.Atom do
 
   defp parse_entries(feed) do
     XmlNode.map_children(feed, "entry", fn(e) -> parse_entry(feed, e) end)
-  end
-
-  defp parse_entry(feed, entry) do
-    links         = entry |> elements("link", [attr: "href"])
-    enclosure     = entry |> element("enclosure", [attr: "href"])
-    media_content = entry |> element("media:content", [attr: "url"])
-
-    %{
-      authors:      entry |> elements("author/name"),
-      id:           entry |> element("id"),
-      title:        entry |> element("title"),
-      updated:      entry |> element("updated"),
-      published:    entry |> element("published"),
-
-      # TODO: add optional scheme and label attributes
-      categories:   entry |> elements("category", [attr: "term"]),
-      contributors: entry |> elements("contributor/name"),
-
-      generator:    entry |> element("generator", [attr: "uri"]),
-      rights:       entry |> element("rights"),
-      source:       entry |> element("source"),
-
-      links:        links,
-      url:          feed_entry_url(feed, entry),
-
-      image:        enclosure || media_content,
-      summary:      entry |> element("summary"),
-      content:      entry |> element("content")
-    }
   end
 
   defp feed_entry_url(feed, entry) do

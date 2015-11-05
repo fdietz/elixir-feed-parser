@@ -44,6 +44,31 @@ defmodule ElixirFeedParser.Parsers.RSS2 do
     }
   end
 
+  def parse_entry(feed, entry) do
+    author     = entry |> element("author")
+    dc_creator = entry |> element("dc:creator")
+
+    %{
+      title:          entry |> element("title"),
+      url:            feed_entry_url(feed, entry),
+      "rss2:link":    entry |> element("link"),
+      description:    entry |> element("description"),
+      author:         author || dc_creator,
+      "rss2:dc:creator": entry |> element("dc:creator"),
+      categories:     entry |> elements("category"),
+      # support dc:identifier too
+      id:             entry |> element("guid"),
+      "rss2:guid":    entry |> element("guid"),
+      comments:       entry |> element("comments"),
+      # TODO: also work with pubdate or publicationDate, dc:date, dc:Date, dcterms:created
+      updated:        entry |> element("pubDate"),
+      "rss2:pubDate": entry |> element("pubDate"),
+      source:         entry |> element("source", [attr: "url"]),
+      content:        entry |> element("content:encoded"),
+      enclosure:      entry |> XmlNode.find("enclosure") |> parse_enclosure
+    }
+  end
+
   defp hubs(feed) do
     case feed_burner_namespace?(feed) do
       true  -> feed |> elements("atom10:link[@rel='hub']", [attr: "href"])
@@ -69,31 +94,6 @@ defmodule ElixirFeedParser.Parsers.RSS2 do
 
   defp parse_entries(feed) do
     XmlNode.map_children(feed, "item", fn(e) -> parse_entry(feed, e) end)
-  end
-
-  defp parse_entry(feed, entry) do
-    author     = entry |> element("author")
-    dc_creator = entry |> element("dc:creator")
-
-    %{
-      title:          entry |> element("title"),
-      url:            feed_entry_url(feed, entry),
-      "rss2:link":    entry |> element("link"),
-      description:    entry |> element("description"),
-      author:         author || dc_creator,
-      "rss2:dc:creator": entry |> element("dc:creator"),
-      categories:     entry |> elements("category"),
-      # support dc:identifier too
-      id:             entry |> element("guid"),
-      "rss2:guid":    entry |> element("guid"),
-      comments:       entry |> element("comments"),
-      # TODO: also work with pubdate or publicationDate, dc:date, dc:Date, dcterms:created
-      updated:        entry |> element("pubDate"),
-      "rss2:pubDate": entry |> element("pubDate"),
-      source:         entry |> element("source", [attr: "url"]),
-      content:        entry |> element("content:encoded"),
-      enclosure:      entry |> XmlNode.find("enclosure") |> parse_enclosure
-    }
   end
 
   defp feed_entry_url(feed, entry) do
