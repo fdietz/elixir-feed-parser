@@ -2,11 +2,11 @@ defmodule ElixirFeedParser.Test.FeedburnerRSS2EntryTest do
   use ExUnit.Case
 
   alias ElixirFeedParser.XmlNode
-  alias ElixirFeedParser.Parsers.RSS2
+  alias ElixirFeedParser.Parsers.FeedburnerRSS2
 
   setup do
     example1_file = File.read!("test/fixtures/rss2/TechCrunch.xml")
-    example1 = XmlNode.parse_string(example1_file) |> RSS2.parse
+    example1 = XmlNode.parse_string(example1_file) |> FeedburnerRSS2.parse
     {:ok, [example1: List.first(example1.entries)]}
   end
 

@@ -2,15 +2,15 @@ defmodule ElixirFeedParser.Test.FeedburnerAtomEntryTest do
   use ExUnit.Case
 
   alias ElixirFeedParser.XmlNode
-  alias ElixirFeedParser.Parsers.Atom
+  alias ElixirFeedParser.Parsers.FeedburnerAtom
 
   setup do
     example1_file = File.read!("test/fixtures/atom/PaulDixExplainsNothing.xml")
-    example1 = XmlNode.parse_string(example1_file) |> Atom.parse
+    example1 = XmlNode.parse_string(example1_file) |> FeedburnerAtom.parse
     example2_file = File.read!("test/fixtures/atom/PaulDixExplainsNothingAlternate.xml")
-    example2 = XmlNode.parse_string(example2_file) |> Atom.parse
+    example2 = XmlNode.parse_string(example2_file) |> FeedburnerAtom.parse
     example3_file = File.read!("test/fixtures/atom/FeedBurnerUrlNoAlternate.xml")
-    example3 = XmlNode.parse_string(example3_file) |> Atom.parse
+    example3 = XmlNode.parse_string(example3_file) |> FeedburnerAtom.parse
     {:ok, [example1: List.first(example1.entries),
         example2: List.first(example2.entries), example3:
         List.first(example3.entries)]}

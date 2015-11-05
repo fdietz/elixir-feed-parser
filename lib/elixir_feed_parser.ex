@@ -4,6 +4,8 @@ defmodule ElixirFeedParser do
   alias ElixirFeedParser.Parsers.RSS2
   alias ElixirFeedParser.Parsers.GoogleDocsAtom
   alias ElixirFeedParser.Parsers.ITunesRSS2
+  alias ElixirFeedParser.Parsers.FeedburnerAtom
+  alias ElixirFeedParser.Parsers.FeedburnerRSS2
 
   def parse(xml_string) do
     XmlNode.parse_string(xml_string) |> determine_feed_parser |> parse_document
@@ -17,6 +19,8 @@ defmodule ElixirFeedParser do
     cond do
       GoogleDocsAtom.can_parse?(xml) -> {:ok, GoogleDocsAtom, xml}
       ITunesRSS2.can_parse?(xml)     -> {:ok, ITunesRSS2, xml}
+      FeedburnerAtom.can_parse?(xml) -> {:ok, FeedburnerAtom, xml}
+      FeedburnerRSS2.can_parse?(xml) -> {:ok, FeedburnerRSS2, xml}
       Atom.can_parse?(xml)           -> {:ok, Atom, xml}
       RSS2.can_parse?(xml)           -> {:ok, RSS2, xml}
       true -> {:error, "Feed format unknown"}

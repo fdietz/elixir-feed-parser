@@ -19,7 +19,7 @@ defmodule ElixirFeedParser.Parsers.RSS2 do
       title:                 feed |> element("title"),
       description:           feed |> element("description"),
       url:                   url,
-      hubs:                  hubs(feed),
+      hubs:                  [feed |> element("atom:link[@rel='self']", [attr: "href"])],
       "atom:link":           atom_link,
       "rss2:link":           feed |> element("link"),
       language:              feed |> element("language"),
@@ -44,40 +44,29 @@ defmodule ElixirFeedParser.Parsers.RSS2 do
     }
   end
 
-  def parse_entry(feed, entry) do
+  def parse_entry(_feed, entry) do
     author     = entry |> element("author")
     dc_creator = entry |> element("dc:creator")
 
     %{
-      title:          entry |> element("title"),
-      url:            feed_entry_url(feed, entry),
-      "rss2:link":    entry |> element("link"),
-      description:    entry |> element("description"),
-      author:         author || dc_creator,
+      title:             entry |> element("title"),
+      url:               entry |> element("link"),
+      "rss2:link":       entry |> element("link"),
+      description:       entry |> element("description"),
+      author:            author || dc_creator,
       "rss2:dc:creator": entry |> element("dc:creator"),
-      categories:     entry |> elements("category"),
+      categories:        entry |> elements("category"),
       # support dc:identifier too
-      id:             entry |> element("guid"),
-      "rss2:guid":    entry |> element("guid"),
-      comments:       entry |> element("comments"),
+      id:                entry |> element("guid"),
+      "rss2:guid":       entry |> element("guid"),
+      comments:          entry |> element("comments"),
       # TODO: also work with pubdate or publicationDate, dc:date, dc:Date, dcterms:created
-      updated:        entry |> element("pubDate"),
-      "rss2:pubDate": entry |> element("pubDate"),
-      source:         entry |> element("source", [attr: "url"]),
-      content:        entry |> element("content:encoded"),
-      enclosure:      entry |> XmlNode.find("enclosure") |> parse_enclosure
+      updated:           entry |> element("pubDate"),
+      "rss2:pubDate":    entry |> element("pubDate"),
+      source:            entry |> element("source", [attr: "url"]),
+      content:           entry |> element("content:encoded"),
+      enclosure:         entry |> XmlNode.find("enclosure") |> parse_enclosure
     }
-  end
-
-  defp hubs(feed) do
-    case feed_burner_namespace?(feed) do
-      true  -> feed |> elements("atom10:link[@rel='hub']", [attr: "href"])
-      false -> [feed |> element("atom:link[@rel='self']", [attr: "href"])]
-    end
-  end
-
-  def feed_burner_namespace?(feed) do
-    XmlNode.namespaces(feed)["feedburner"] == "http://rssnamespace.org/feedburner/ext/1.0"
   end
 
   defp parse_image(nil), do: nil
@@ -94,16 +83,6 @@ defmodule ElixirFeedParser.Parsers.RSS2 do
 
   defp parse_entries(feed) do
     XmlNode.map_children(feed, "item", fn(e) -> parse_entry(feed, e) end)
-  end
-
-  defp feed_entry_url(feed, entry) do
-    link = entry |> element("link")
-    feed_burner_original_link = entry |> element("feedburner:origLink")
-
-    case feed_burner_namespace?(feed) do
-      true  -> feed_burner_original_link
-      false -> link
-    end
   end
 
   defp parse_enclosure(nil), do: nil
