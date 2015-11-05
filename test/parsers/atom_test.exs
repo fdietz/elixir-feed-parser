@@ -15,13 +15,7 @@ defmodule ElixirFeedParser.Test.AtomTest do
     example4 = XmlNode.parse_string(example4_file) |> Atom.parse
     example5_file = File.read!("test/fixtures/atom/FeedjiraBlog.xml")
     example5 = XmlNode.parse_string(example5_file) |> Atom.parse
-    example6_file = File.read!("test/fixtures/atom/FeedBurnerXHTML.xml")
-    example6 = XmlNode.parse_string(example6_file) |> Atom.parse
-    example7_file = File.read!("test/fixtures/atom/PaulDixExplainsNothing.xml")
-    example7 = XmlNode.parse_string(example7_file) |> Atom.parse
-    example8_file = File.read!("test/fixtures/atom/TypePadNews.xml")
-    example8 = XmlNode.parse_string(example8_file) |> Atom.parse
-    {:ok, [example1: example1, example2: example2, example3: example3, example4: example4, example5: example5, example6: example6, example7: example7, example8: example8]}
+    {:ok, [example1: example1, example2: example2, example3: example3, example4: example4, example5: example5]}
   end
 
   test "can_parse?" do
@@ -139,23 +133,4 @@ defmodule ElixirFeedParser.Test.AtomTest do
     assert Enum.count(feed.entries) == 10
   end
 
-  test "parse feed burner url", %{example6: feed} do
-    assert feed.url == "http://www.rotoauthority.com/"
-  end
-
-  test "parse feed burner feed_url", %{example6: feed} do
-    assert feed.feed_url == "http://www.typepad.com/t/atom/weblog/blog_id=182926"
-  end
-
-  test "parse feed burner hubs", %{example6: feed} do
-    assert feed.hubs == ["http://pubsubhubbub.appspot.com/"]
-  end
-
-  test "parse the feed burner feed_url 2", %{example7: feed} do
-    assert feed.feed_url == "http://feeds.feedburner.com/PaulDixExplainsNothing"
-  end
-
-  test "parse feed burner hubs 2", %{example8: feed} do
-    assert feed.hubs == ["http://pubsubhubbub.appspot.com/"]
-  end
 end

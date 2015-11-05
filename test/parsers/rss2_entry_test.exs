@@ -9,10 +9,8 @@ defmodule ElixirFeedParser.Test.RSS2EntryTest do
     example1 = XmlNode.parse_string(example1_file) |> RSS2.parse
     example2_file = File.read!("test/fixtures/rss2/TenderLoveMaking.xml")
     example2 = XmlNode.parse_string(example2_file) |> RSS2.parse
-    example3_file = File.read!("test/fixtures/rss2/TechCrunch.xml")
-    example3 = XmlNode.parse_string(example3_file) |> RSS2.parse
     {:ok, [example1: List.first(example1.entries), example2:
-        List.first(example2.entries), example3: List.first(example3.entries)]}
+        List.first(example2.entries)]}
   end
 
   test "parse title", %{example2: entry} do
@@ -43,7 +41,4 @@ defmodule ElixirFeedParser.Test.RSS2EntryTest do
     assert entry.categories == ["computadora", "nokogiri", "rails"]
   end
 
-  test "parse feed burner origLink", %{example3: feed} do
-    assert feed.url == "http://techcrunch.com/2011/11/02/angies-list-prices-ipo-at-11-to-13-per-share-valued-at-over-600m/"
-  end
 end
