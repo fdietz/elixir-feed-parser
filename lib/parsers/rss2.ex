@@ -98,7 +98,7 @@ defmodule ElixirFeedParser.Parsers.RSS2 do
 
   defp feed_entry_url(feed, entry) do
     link = entry |> element("link")
-    feed_burner_original_link = entry |> element("feedburner:origLink", [attr: "url"])
+    feed_burner_original_link = entry |> element("feedburner:origLink")
 
     case feed_burner_namespace?(feed) do
       true  -> feed_burner_original_link
