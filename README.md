@@ -3,9 +3,14 @@
 
 Elixir Atom/RSS Parser. Depends on Erlang's **xmerl** xml parser.
 
+It is basically a port of the excellent Ruby [Feed Jira](https://github.com/feedjira/feedjira) gem.
+
+Supports specifically feed burner RSS2 feeds, [iTunes Podcast](http://www.apple.com/itunes/whatson/podcasts/specs.html) and Google Docs
+feeds.
+
 # Current status
 The code is currently in alpha state and my first ever written piece of Elixir
-code.
+code. 
 
 # Setup
 
@@ -63,3 +68,6 @@ RSS2 standard, therefore we additionally expose the `rss2:link` attribute.
 * authors
 * categories (an array of strings)
 * source
+
+# Contribute
+I appreciate any contribution to elixir-feed-parser. Open a pull request or file issues if you got feedback!
