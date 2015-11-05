@@ -103,12 +103,12 @@ defmodule ElixirFeedParser.Parsers.Atom do
   end
 
   defp feed_entry_url(feed, entry) do
-    url    = entry |> element("link[@type='text/html']")
+    url    = entry |> element("link[@type='text/html' and @rel='alternate']", [attr: "href"])
     links  = entry |> elements("link", [attr: "href"])
-    fb_url = entry |> element("feedburner:origLink", [attr: "url"])
+    fb_url = entry |> element("feedburner:origLink")
 
     case feed_burner_namespace?(feed) do
-      true  -> fb_url
+      true  -> if fb_url do fb_url else List.first(links) end
       false -> if url do url else List.last(links) end
     end
   end

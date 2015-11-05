@@ -15,10 +15,18 @@ defmodule ElixirFeedParser.Test.AtomEntryTest do
     example4 = XmlNode.parse_string(example4_file) |> Atom.parse
     example5_file = File.read!("test/fixtures/atom/FeedjiraBlog.xml")
     example5 = XmlNode.parse_string(example5_file) |> Atom.parse
+    example6_file = File.read!("test/fixtures/atom/PaulDixExplainsNothing.xml")
+    example6 = XmlNode.parse_string(example6_file) |> Atom.parse
+    example7_file = File.read!("test/fixtures/atom/PaulDixExplainsNothingAlternate.xml")
+    example7 = XmlNode.parse_string(example7_file) |> Atom.parse
+    example8_file = File.read!("test/fixtures/atom/FeedBurnerUrlNoAlternate.xml")
+    example8 = XmlNode.parse_string(example8_file) |> Atom.parse
     {:ok, [example1: List.first(example1.entries), example2:
         List.first(example2.entries), example3: List.first(example3.entries),
         example4: List.first(example4.entries), example5:
-        List.first(example5.entries)]}
+        List.first(example5.entries), example6: List.first(example6.entries),
+        example7: List.first(example7.entries), example8:
+        List.first(example8.entries)]}
   end
 
 
@@ -76,5 +84,17 @@ defmodule ElixirFeedParser.Test.AtomEntryTest do
 
   test "parse content", %{example1: entry} do
     assert entry.content == "Example content with <a href=\"bla\">link</a><p>my test <em>paragraph</em> is here.</p>"
+  end
+
+  test "parse the url using the feed burner origLink element", %{example6: entry} do
+    assert entry.url == "http://www.pauldix.net/2009/01/making-a-ruby-c-library-even-faster.html"
+  end
+
+  test "parse url via the alternate rel if no feed burner origLink exists", %{example7: entry} do
+    assert entry.url == "http://feeds.feedburner.com/~r/PaulDixExplainsNothing/~3/519925023/making-a-ruby-c-library-even-faster.html"
+  end
+
+  test "parse url if there is no alternate link", %{example8: entry} do
+    assert entry.url == "http://example.com/QQQQ.html"
   end
 end
