@@ -30,7 +30,7 @@ defmodule ElixirFeedParser.Test.RSS2EntryTest do
   end
 
   test "parse updated as pubDate", %{example2: entry} do
-    assert entry.updated == "Thu, 04 Dec 2008 17:17:49 +0000"
+    assert entry.updated == %{day: 4, hour: 17, min: 17, month: 12, sec: 49, usec: 0, year: 2008}
   end
 
   test "parse guid as id", %{example2: entry} do

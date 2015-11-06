@@ -16,7 +16,7 @@ defmodule ElixirFeedParser.Mixfile do
   #
   # Type `mix help compile.app` for more information
   def application do
-    [applications: [:logger, :xmerl]]
+    [applications: [:logger, :xmerl, :tzdata]]
   end
 
   # Dependencies can be Hex packages:
@@ -29,7 +29,7 @@ defmodule ElixirFeedParser.Mixfile do
   #
   # Type `mix help deps` for more examples and options
   defp deps do
-    []
+    [{:timex, "~> 1.0.0-rc1"}]
   end
 
   defp description do

@@ -2,6 +2,8 @@ defmodule ElixirFeedParser.Parsers.RSS2 do
   import ElixirFeedParser.Parsers.Helper
   alias ElixirFeedParser.XmlNode
 
+  @date_format "{RFC1123}"
+
   def can_parse?(xml) do
     xml
     |> XmlNode.find("/rss")
@@ -27,9 +29,9 @@ defmodule ElixirFeedParser.Parsers.RSS2 do
       "rss2:managingEditor": feed |> element("managingEditor"),
       "rss2:webMaster":      feed |> element("webMaster"),
       # TODO: also work with pubdate or publicationDate
-      updated:               feed |> element("pubDate"),
-      "rss2:pubDate":        feed |> element("pubDate"),
-      "rss2:lastBuildDate":  feed |> element("lastBuildDate"),
+      updated:               feed |> element("pubDate") |> to_date_time(@date_format),
+      "rss2:pubDate":        feed |> element("pubDate") |> to_date_time(@date_format),
+      "rss2:lastBuildDate":  feed |> element("lastBuildDate") |> to_date_time(@date_format),
       categories:            feed |> elements("category"),
       generator:             feed |> element("generator"),
       "rss2:ttl":            feed |> element("ttl"),
@@ -61,8 +63,8 @@ defmodule ElixirFeedParser.Parsers.RSS2 do
       "rss2:guid":       entry |> element("guid"),
       comments:          entry |> element("comments"),
       # TODO: also work with pubdate or publicationDate, dc:date, dc:Date, dcterms:created
-      updated:           entry |> element("pubDate"),
-      "rss2:pubDate":    entry |> element("pubDate"),
+      updated:           entry |> element("pubDate") |> to_date_time(@date_format),
+      "rss2:pubDate":    entry |> element("pubDate") |> to_date_time(@date_format),
       source:            entry |> element("source", [attr: "url"]),
       content:           entry |> element("content:encoded"),
       enclosure:         entry |> XmlNode.find("enclosure") |> parse_enclosure

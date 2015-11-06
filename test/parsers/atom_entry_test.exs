@@ -35,11 +35,11 @@ defmodule ElixirFeedParser.Test.AtomEntryTest do
   end
 
   test "parse updated", %{example1: entry} do
-    assert entry.updated == "2015-10-10T12:30:00Z"
+    assert entry.updated == %{day: 10, hour: 12, min: 30, month: 10, sec: 0, usec: 0, year: 2015}
   end
 
   test "parse published", %{example1: entry} do
-    assert entry.published == "2015-10-09T12:30:00Z"
+    assert entry.published == %{day: 9, hour: 12, min: 30, month: 10, sec: 0, usec: 0, year: 2015}
   end
 
   test "parse summary", %{example1: entry} do
