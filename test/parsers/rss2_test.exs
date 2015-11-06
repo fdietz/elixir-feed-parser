@@ -9,7 +9,9 @@ defmodule ElixirFeedParser.Test.RSS2Test do
     example1 = XmlNode.parse_string(example1_file) |> RSS2.parse
     example2_file = File.read!("test/fixtures/rss2/TenderLoveMaking.xml")
     example2 = XmlNode.parse_string(example2_file) |> RSS2.parse
-    {:ok, [example1: example1, example2: example2]}
+    example3_file = File.read!("test/fixtures/rss2/complex_heise_de.xml")
+    example3 = XmlNode.parse_string(example3_file) |> RSS2.parse
+    {:ok, [example1: example1, example2: example2, example3: example3]}
   end
 
   test "can_parse?" do
@@ -71,4 +73,7 @@ defmodule ElixirFeedParser.Test.RSS2Test do
     assert feed.image.url == "http://www.example.com/image"
   end
 
+  test "parse complex document", %{example3: feed} do
+    assert feed.title == "heise online News"
+  end
 end

@@ -15,7 +15,9 @@ defmodule ElixirFeedParser.Test.AtomTest do
     example4 = XmlNode.parse_string(example4_file) |> Atom.parse
     example5_file = File.read!("test/fixtures/atom/FeedjiraBlog.xml")
     example5 = XmlNode.parse_string(example5_file) |> Atom.parse
-    {:ok, [example1: example1, example2: example2, example3: example3, example4: example4, example5: example5]}
+    example6_file = File.read!("test/fixtures/atom/complex_the_verge_com.xml")
+    example6 = XmlNode.parse_string(example6_file) |> Atom.parse
+    {:ok, [example1: example1, example2: example2, example3: example3, example4: example4, example5: example5, example6: example6]}
   end
 
   test "can_parse?" do
@@ -133,4 +135,7 @@ defmodule ElixirFeedParser.Test.AtomTest do
     assert Enum.count(feed.entries) == 10
   end
 
+  test "parse complex", %{example6: feed} do
+    assert feed.title == "The Verge -  All Posts"
+  end
 end
