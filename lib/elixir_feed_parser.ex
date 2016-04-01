@@ -28,5 +28,5 @@ defmodule ElixirFeedParser do
   end
 
   defp parse_document({:ok, parser, xml}), do: parser.parse(xml)
-  defp parse_document(_other), do: _other
+  defp parse_document(other), do: other
 end
