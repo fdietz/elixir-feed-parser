@@ -20,8 +20,8 @@ defmodule ElixirFeedParser.Parsers.Helper do
   def to_date_time(date_time_string), do: to_date_time(date_time_string, "{RFC1123}")
   def to_date_time(nil, _), do: nil
   def to_date_time(date_time_string, format) do
-    case Timex.DateFormat.parse(date_time_string, format) do
-      {:ok, date} -> date |> Timex.Date.universal |> timex_date_time_to_map
+    case Timex.parse(date_time_string, format) do
+      {:ok, date} -> date |> Timex.datetime |> timex_date_time_to_map
       _ -> nil
     end
   end
@@ -29,7 +29,8 @@ defmodule ElixirFeedParser.Parsers.Helper do
   defp timex_date_time_to_map(timex_date_time) do
     %{
       year: timex_date_time.year, month: timex_date_time.month, day: timex_date_time.day,
-      hour: timex_date_time.hour, min: timex_date_time.minute, sec: timex_date_time.second, usec: timex_date_time.ms
+      hour: timex_date_time.hour, min: timex_date_time.minute, sec: timex_date_time.second,
+      usec: timex_date_time.millisecond
     }
   end
 end

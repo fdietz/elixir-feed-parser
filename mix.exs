@@ -3,7 +3,7 @@ defmodule ElixirFeedParser.Mixfile do
 
   def project do
     [app: :elixir_feed_parser,
-     version: "0.9.1",
+     version: "0.9.2",
      elixir: "~> 1.0",
      description: description,
      package: package,
@@ -29,7 +29,7 @@ defmodule ElixirFeedParser.Mixfile do
   #
   # Type `mix help deps` for more examples and options
   defp deps do
-    [{:timex, "~> 1.0.0-rc1"}]
+    [{:timex, "~> 2.1.0"}]
   end
 
   defp description do

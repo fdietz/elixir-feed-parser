@@ -1,3 +1,6 @@
+# 0.9.2 / 2016-040-4
+* update to timex 2.1.4
+
 # 0.9.1 / 2016-04-01
 * parse date time using timex library
 
