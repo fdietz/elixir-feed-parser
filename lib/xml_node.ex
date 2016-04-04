@@ -45,7 +45,7 @@ defmodule ElixirFeedParser.XmlNode do
     "#{extract_text(head)}#{extract_text(tail)}"
   end
 
-  def xpath(nil, path), do: nil
+  def xpath(nil, _path), do: nil
   def xpath(node, path) do
     :xmerl_xpath.string(to_char_list(path), node)
   end
@@ -55,7 +55,7 @@ defmodule ElixirFeedParser.XmlNode do
     Atom.to_string(default)
   end
 
-  def namespaces({:xmlElement, _name, _expanded_name, _nsinfo, {:xmlNamespace, default, nodes}, _parents, _pos, _attributes, _content, _language, _xmlbase, _elementdef}) do
+  def namespaces({:xmlElement, _name, _expanded_name, _nsinfo, {:xmlNamespace, _default, nodes}, _parents, _pos, _attributes, _content, _language, _xmlbase, _elementdef}) do
     result = Enum.map(nodes, fn(n) ->
       {key, value} = n;
       {List.to_string(key), Atom.to_string(value)}
