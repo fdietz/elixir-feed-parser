@@ -4,8 +4,13 @@ defmodule ElixirFeedParser.XmlNode do
   # for Record definitions of xmlElement, xmlAttribute, xmlText
 
   def parse_string(xml_string, options \\ [quiet: true]) do
-    {doc, []} = xml_string |> :binary.bin_to_list |> :xmerl_scan.string(options)
-    doc
+    try do
+      {doc, _misc} = xml_string |> :binary.bin_to_list |> :xmerl_scan.string(options)
+      {:ok, doc}
+    catch
+      :exit, error ->
+        {:error, error}
+    end
   end
 
   def find(node, path) do
