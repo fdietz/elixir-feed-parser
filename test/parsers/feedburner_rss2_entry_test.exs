@@ -6,7 +6,7 @@ defmodule ElixirFeedParser.Test.FeedburnerRSS2EntryTest do
 
   setup do
     example1_file = File.read!("test/fixtures/rss2/TechCrunch.xml")
-    example1 = XmlNode.parse_string(example1_file) |> FeedburnerRSS2.parse
+    example1 = with {:ok, xml} <- XmlNode.parse_string(example1_file), do: FeedburnerRSS2.parse(xml)
     {:ok, [example1: List.first(example1.entries)]}
   end
 

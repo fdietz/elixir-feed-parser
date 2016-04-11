@@ -6,11 +6,11 @@ defmodule ElixirFeedParser.Test.RSS2Test do
 
   setup do
     example1_file = File.read!("test/fixtures/rss2/example1.xml")
-    example1 = XmlNode.parse_string(example1_file) |> RSS2.parse
+    example1 = with {:ok, xml} <- XmlNode.parse_string(example1_file), do: RSS2.parse(xml)
     example2_file = File.read!("test/fixtures/rss2/TenderLoveMaking.xml")
-    example2 = XmlNode.parse_string(example2_file) |> RSS2.parse
+    example2 = with {:ok, xml} <- XmlNode.parse_string(example2_file), do: RSS2.parse(xml)
     example3_file = File.read!("test/fixtures/rss2/complex_heise_de.xml")
-    example3 = XmlNode.parse_string(example3_file) |> RSS2.parse
+    example3 = with {:ok, xml} <- XmlNode.parse_string(example3_file), do: RSS2.parse(xml)
     {:ok, [example1: example1, example2: example2, example3: example3]}
   end
 
@@ -21,7 +21,7 @@ defmodule ElixirFeedParser.Test.RSS2Test do
       <title>Example Feed</title>
     </rss>
     """
-    xml = XmlNode.parse_string(sample_xml)
+    {:ok, xml} = XmlNode.parse_string(sample_xml)
     assert RSS2.can_parse?(xml)
   end
 

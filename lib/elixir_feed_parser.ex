@@ -8,21 +8,10 @@ defmodule ElixirFeedParser do
   alias ElixirFeedParser.Parsers.FeedburnerRSS2
 
   def parse(xml_string) do
-    case XmlNode.parse_string(xml_string) do
-      {:ok, xml_node} ->
-        case xml_node |> determine_feed_parser |> parse_document do
-          %{} = result ->
-            {:ok, result}
-          {:error, reason} ->
-            {:error, reason}
-        end
-      {:error, error} ->
-        {:error, error}
-     end
-  end
-
-  def fetch_and_parse(_url) do
-    # TODO: implement me
+    with {:ok, xml}         <- XmlNode.parse_string(xml_string),
+         {:ok, parser, xml} <- determine_feed_parser(xml),
+         %{} = parsed_feed  <- parser.parse(xml),
+         do: {:ok, parsed_feed}
   end
 
   def determine_feed_parser(xml) do
@@ -37,6 +26,4 @@ defmodule ElixirFeedParser do
     end
   end
 
-  defp parse_document({:ok, parser, xml}), do: parser.parse(xml)
-  defp parse_document(other), do: other
 end

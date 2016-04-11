@@ -6,11 +6,11 @@ defmodule ElixirFeedParser.Test.FeedburnerAtomTest do
 
   setup do
     example1_file = File.read!("test/fixtures/atom/FeedBurnerXHTML.xml")
-    example1 = XmlNode.parse_string(example1_file) |> FeedburnerAtom.parse
+    example1 = with {:ok, xml} <- XmlNode.parse_string(example1_file), do: FeedburnerAtom.parse(xml)
     example2_file = File.read!("test/fixtures/atom/PaulDixExplainsNothing.xml")
-    example2 = XmlNode.parse_string(example2_file) |> FeedburnerAtom.parse
+    example2 = with {:ok, xml} <- XmlNode.parse_string(example2_file), do: FeedburnerAtom.parse(xml)
     example3_file = File.read!("test/fixtures/atom/TypePadNews.xml")
-    example3 = XmlNode.parse_string(example3_file) |> FeedburnerAtom.parse
+    example3 = with {:ok, xml} <- XmlNode.parse_string(example3_file), do: FeedburnerAtom.parse(xml)
     {:ok, [example1: example1, example2: example2, example3: example3]}
   end
 
@@ -21,7 +21,7 @@ defmodule ElixirFeedParser.Test.FeedburnerAtomTest do
       <title>Example Feed</title>
     </feed>
     """
-    xml = XmlNode.parse_string(sample_xml)
+    {:ok, xml} = XmlNode.parse_string(sample_xml)
     assert FeedburnerAtom.can_parse?(xml)
   end
 

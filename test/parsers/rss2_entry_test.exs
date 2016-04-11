@@ -6,9 +6,9 @@ defmodule ElixirFeedParser.Test.RSS2EntryTest do
 
   setup do
     example1_file = File.read!("test/fixtures/rss2/example1.xml")
-    example1 = XmlNode.parse_string(example1_file) |> RSS2.parse
+    example1 = with {:ok, xml} <- XmlNode.parse_string(example1_file), do: RSS2.parse(xml)
     example2_file = File.read!("test/fixtures/rss2/TenderLoveMaking.xml")
-    example2 = XmlNode.parse_string(example2_file) |> RSS2.parse
+    example2 = with {:ok, xml} <- XmlNode.parse_string(example2_file), do: RSS2.parse(xml)
     {:ok, [example1: List.first(example1.entries), example2:
         List.first(example2.entries)]}
   end

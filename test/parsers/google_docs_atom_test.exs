@@ -6,7 +6,7 @@ defmodule ElixirFeedParser.Test.GoogleDocsAtomTest do
 
   setup do
     example1_file = File.read!("test/fixtures/atom/GoogleDocsList.xml")
-    example1 = XmlNode.parse_string(example1_file) |> GoogleDocsAtom.parse
+    example1 = with {:ok, xml} <- XmlNode.parse_string(example1_file), do: GoogleDocsAtom.parse(xml)
     {:ok, [example1: example1]}
   end
 
@@ -17,7 +17,7 @@ defmodule ElixirFeedParser.Test.GoogleDocsAtomTest do
       <title>Example Feed</title>
     </feed>
     """
-    xml = XmlNode.parse_string(sample_xml)
+    {:ok, xml} = XmlNode.parse_string(sample_xml)
     assert GoogleDocsAtom.can_parse?(xml)
   end
 

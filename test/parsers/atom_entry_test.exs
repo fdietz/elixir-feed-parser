@@ -6,15 +6,15 @@ defmodule ElixirFeedParser.Test.AtomEntryTest do
 
   setup do
     example1_file = File.read!("test/fixtures/atom/example1.xml")
-    example1 = XmlNode.parse_string(example1_file) |> Atom.parse
+    example1 = with {:ok, xml} <- XmlNode.parse_string(example1_file), do: Atom.parse(xml)
     example2_file = File.read!("test/fixtures/atom/AmazonWebServicesBlog.xml")
-    example2 = XmlNode.parse_string(example2_file) |> Atom.parse
+    example2 = with {:ok, xml} <- XmlNode.parse_string(example2_file), do: Atom.parse(xml)
     example3_file = File.read!("test/fixtures/atom/atom_with_link_tag_for_url_unmarked.xml")
-    example3 = XmlNode.parse_string(example3_file) |> Atom.parse
+    example3 = with {:ok, xml} <- XmlNode.parse_string(example3_file), do: Atom.parse(xml)
     example4_file = File.read!("test/fixtures/atom/SamRuby.xml")
-    example4 = XmlNode.parse_string(example4_file) |> Atom.parse
+    example4 = with {:ok, xml} <- XmlNode.parse_string(example4_file), do: Atom.parse(xml)
     example5_file = File.read!("test/fixtures/atom/FeedjiraBlog.xml")
-    example5 = XmlNode.parse_string(example5_file) |> Atom.parse
+    example5 = with {:ok, xml} <- XmlNode.parse_string(example5_file), do: Atom.parse(xml)
     {:ok, [example1: List.first(example1.entries), example2:
         List.first(example2.entries), example3: List.first(example3.entries),
         example4: List.first(example4.entries), example5:

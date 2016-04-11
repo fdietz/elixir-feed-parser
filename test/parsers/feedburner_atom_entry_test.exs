@@ -6,11 +6,11 @@ defmodule ElixirFeedParser.Test.FeedburnerAtomEntryTest do
 
   setup do
     example1_file = File.read!("test/fixtures/atom/PaulDixExplainsNothing.xml")
-    example1 = XmlNode.parse_string(example1_file) |> FeedburnerAtom.parse
+    example1 = with {:ok, xml} <- XmlNode.parse_string(example1_file), do: FeedburnerAtom.parse(xml)
     example2_file = File.read!("test/fixtures/atom/PaulDixExplainsNothingAlternate.xml")
-    example2 = XmlNode.parse_string(example2_file) |> FeedburnerAtom.parse
+    example2 = with {:ok, xml} <- XmlNode.parse_string(example2_file), do: FeedburnerAtom.parse(xml)
     example3_file = File.read!("test/fixtures/atom/FeedBurnerUrlNoAlternate.xml")
-    example3 = XmlNode.parse_string(example3_file) |> FeedburnerAtom.parse
+    example3 = with {:ok, xml} <- XmlNode.parse_string(example3_file), do: FeedburnerAtom.parse(xml)
     {:ok, [example1: List.first(example1.entries),
         example2: List.first(example2.entries), example3:
         List.first(example3.entries)]}

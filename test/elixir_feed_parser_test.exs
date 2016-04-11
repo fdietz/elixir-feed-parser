@@ -12,32 +12,32 @@ defmodule ElixirFeedParserTest do
   end
 
   test "parsing an Atom file", %{example1: xml} do
-    result = ElixirFeedParser.parse(xml)
+    {:ok, result} = ElixirFeedParser.parse(xml)
     assert "Example feed title" == result.title
   end
 
   test "parsing an RSS2 file", %{example2: xml} do
-    result = ElixirFeedParser.parse(xml)
+    {:ok, result} = ElixirFeedParser.parse(xml)
     assert "Example feed title" == result.title
   end
 
   test "parsing an Google Docs Atom file", %{example3: xml} do
-    result = ElixirFeedParser.parse(xml)
+    {:ok, result} = ElixirFeedParser.parse(xml)
     assert "Available Documents - john.smith.example@gmail.com" == result.title
   end
 
   test "parsing an iTunes RSS2 file", %{example4: xml} do
-    result = ElixirFeedParser.parse(xml)
+    {:ok, result} = ElixirFeedParser.parse(xml)
     assert "All About Everything" == result.title
   end
 
   test "parsing an Feedburner Atom file", %{example5: xml} do
-    result = ElixirFeedParser.parse(xml)
+    {:ok, result} = ElixirFeedParser.parse(xml)
     assert "Paul Dix Explains Nothing" == result.title
   end
 
   test "parsing an Feedburner RSS2 file", %{example6: xml} do
-    result = ElixirFeedParser.parse(xml)
+    {:ok, result} = ElixirFeedParser.parse(xml)
     assert "TechCrunch" == result.title
   end
 

@@ -6,7 +6,7 @@ defmodule ElixirFeedParser.Test.ITunesRSS2Test do
 
   setup do
     example1_file = File.read!("test/fixtures/rss2/itunes.xml")
-    example1 = XmlNode.parse_string(example1_file) |> ITunesRSS2.parse
+    example1 = with {:ok, xml} <- XmlNode.parse_string(example1_file), do: ITunesRSS2.parse(xml)
     {:ok, [example1: example1]}
   end
 
@@ -17,7 +17,7 @@ defmodule ElixirFeedParser.Test.ITunesRSS2Test do
       <title>Example Feed</title>
     </rss>
     """
-    xml = XmlNode.parse_string(sample_xml)
+    {:ok, xml} = XmlNode.parse_string(sample_xml)
     assert ITunesRSS2.can_parse?(xml)
   end
 
