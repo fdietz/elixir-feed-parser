@@ -41,6 +41,7 @@ defmodule ElixirFeedParser.Mixfile do
   defp package do
     [
       contributors: ["fdietz@gmail.com"],
+      maintainers: ["fdietz@gmail.com"],
       licenses: ["MIT"],
       links: %{"GitHub" => "https://github.com/fdietz/elixir-feed-parser"}
     ]
