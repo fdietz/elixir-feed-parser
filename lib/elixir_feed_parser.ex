@@ -10,8 +10,7 @@ defmodule ElixirFeedParser do
   def parse(xml_string) do
     with {:ok, xml}         <- XmlNode.parse_string(xml_string),
          {:ok, parser, xml} <- determine_feed_parser(xml),
-         %{} = parsed_feed  <- parser.parse(xml),
-         do: {:ok, parsed_feed}
+         do: {:ok, parser.parse(xml)}
   end
 
   def determine_feed_parser(xml) do
@@ -26,4 +25,13 @@ defmodule ElixirFeedParser do
     end
   end
 
+  def supported_feed_format?(xml_string) do
+    {:ok, xml} = XmlNode.parse_string(xml_string)
+    case determine_feed_parser(xml) do
+      {:ok, _parser, _xml} ->
+        true
+      _ ->
+        false
+    end
+  end
 end
