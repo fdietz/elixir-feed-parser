@@ -3,7 +3,7 @@ defmodule ElixirFeedParser.Mixfile do
 
   def project do
     [app: :elixir_feed_parser,
-     version: "0.10.0",
+     version: "1.0.0",
      elixir: "~> 1.0",
      description: description,
      package: package,
