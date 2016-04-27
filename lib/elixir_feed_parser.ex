@@ -21,7 +21,7 @@ defmodule ElixirFeedParser do
       FeedburnerRSS2.can_parse?(xml) -> {:ok, FeedburnerRSS2, xml}
       Atom.can_parse?(xml)           -> {:ok, Atom, xml}
       RSS2.can_parse?(xml)           -> {:ok, RSS2, xml}
-      true -> {:error, "Feed format unknown"}
+      true -> {:error, :feed_format_unknown}
     end
   end
 

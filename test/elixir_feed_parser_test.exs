@@ -49,7 +49,7 @@ defmodule ElixirFeedParserTest do
     </feed>
     """
     result = ElixirFeedParser.parse(sample_xml)
-    assert {:error, "Feed format unknown"} == result
+    assert {:error, :feed_format_unknown} == result
   end
 
 end
