@@ -15,10 +15,12 @@ defmodule ElixirFeedParser.Test.AtomEntryTest do
     example4 = with {:ok, xml} <- XmlNode.parse_string(example4_file), do: Atom.parse(xml)
     example5_file = File.read!("test/fixtures/atom/FeedjiraBlog.xml")
     example5 = with {:ok, xml} <- XmlNode.parse_string(example5_file), do: Atom.parse(xml)
+    example6_file = File.read!("test/fixtures/atom/heise.xml")
+    example6 = with {:ok, xml} <- XmlNode.parse_string(example6_file), do: Atom.parse(xml)
     {:ok, [example1: List.first(example1.entries), example2:
         List.first(example2.entries), example3: List.first(example3.entries),
         example4: List.first(example4.entries), example5:
-        List.first(example5.entries)]}
+        List.first(example5.entries), example6: List.first(example6.entries)]}
   end
 
 
@@ -78,4 +80,7 @@ defmodule ElixirFeedParser.Test.AtomEntryTest do
     assert entry.content == "Example content with <a href=\"bla\">link</a><p>my test <em>paragraph</em> is here.</p>"
   end
 
+  test "parse content if xhtml", %{example6: entry} do
+    assert Regex.match?(~r/Virtuelle/, entry.content)
+  end
 end

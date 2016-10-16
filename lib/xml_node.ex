@@ -36,7 +36,6 @@ defmodule ElixirFeedParser.XmlNode do
     List.to_string(value)
   end
 
-
   def text(node) do
     node |> xpath("./text()") |> extract_text
   end
@@ -69,4 +68,8 @@ defmodule ElixirFeedParser.XmlNode do
     Enum.into(result, HashDict.new)
   end
 
+  def element_to_string(node) do
+    content = :xmerl.export_simple_element(node, :xmerl_xml)
+    List.to_string(content)
+  end
 end

@@ -50,6 +50,14 @@ defmodule ElixirFeedParser.Parsers.Atom do
     enclosure     = entry |> element("enclosure", [attr: "href"])
     media_content = entry |> element("media:content", [attr: "url"])
 
+    content_type = entry |> element("content", [attr: "type"])
+    content = case content_type do
+      "xhtml" ->
+        entry |> XmlNode.find("content") |> XmlNode.element_to_string
+      _other ->
+        entry |> element("content")
+    end
+
     %{
       authors:      entry |> elements("author/name"),
       id:           entry |> element("id"),
@@ -70,7 +78,8 @@ defmodule ElixirFeedParser.Parsers.Atom do
 
       image:        enclosure || media_content,
       summary:      entry |> element("summary"),
-      content:      entry |> element("content")
+
+      content:      content
     }
   end
 

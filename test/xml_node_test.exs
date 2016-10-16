@@ -76,4 +76,23 @@ defmodule XmlNodeTest do
     assert titles == ["Example title 1", "Example title 2"]
   end
 
+  test "parsing xml and return node as string again" do
+    sample_xml = """
+    <feed xmlns="http://www.w3.org/2005/Atom">
+      <entry>
+        <title>Example title 1</title>
+        <content type="xhtml">
+          <h1>Heading</h1>
+          <p class="top">This is a paragraph</p>
+        </content>
+      </entry>
+    </feed>
+    """
+    {:ok, xml} = XmlNode.parse_string(sample_xml)
+
+    node = xml |> XmlNode.find("entry/content")
+    content = XmlNode.element_to_string(node)
+    {:ok, content_xml} = XmlNode.parse_string(content)
+    assert "This is a paragraph", content_xml |> XmlNode.find("p") |> XmlNode.text
+  end
 end

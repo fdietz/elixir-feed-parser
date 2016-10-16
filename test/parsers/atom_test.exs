@@ -127,11 +127,11 @@ defmodule ElixirFeedParser.Test.AtomTest do
     assert feed.rights == "MIT License"
   end
 
-  test "parse entries", %{example1: feed, example2: feed} do
+  test "parse entries", %{example1: feed} do
     assert Enum.count(feed.entries) == 1
   end
 
-  test "parse entries", %{example2: feed} do
+  test "parse complex entries", %{example2: feed} do
     assert Enum.count(feed.entries) == 10
   end
 
