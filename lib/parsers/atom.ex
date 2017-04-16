@@ -3,7 +3,7 @@ defmodule ElixirFeedParser.Parsers.Atom do
 
   alias ElixirFeedParser.XmlNode
 
-  @date_format "{ISO}"
+  @date_format "ISO_8601"
 
   def can_parse?(xml) do
     xml

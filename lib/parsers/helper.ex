@@ -17,20 +17,16 @@ defmodule ElixirFeedParser.Parsers.Helper do
     node |> XmlNode.map_children(selector, fn(e) -> XmlNode.attr(e, attr) end)
   end
 
-  def to_date_time(date_time_string), do: to_date_time(date_time_string, "{RFC1123}")
+  def to_date_time(date_time_string), do: to_date_time(date_time_string, "RFC_1123")
   def to_date_time(nil, _), do: nil
   def to_date_time(date_time_string, format) do
-    case Timex.parse(date_time_string, format) do
-      {:ok, date} -> date |> Timex.datetime |> timex_date_time_to_map
-      _ -> nil
+    case format do
+      "ISO_8601" -> 
+        {:ok, date_time, _} = DateTime.from_iso8601(date_time_string)
+        date_time
+      "RFC_1123" -> 
+        {:ok, date_time} = Timex.parse(date_time_string, "{RFC1123}")
+        date_time
     end
-  end
-
-  defp timex_date_time_to_map(timex_date_time) do
-    %{
-      year: timex_date_time.year, month: timex_date_time.month, day: timex_date_time.day,
-      hour: timex_date_time.hour, min: timex_date_time.minute, sec: timex_date_time.second,
-      usec: timex_date_time.millisecond
-    }
   end
 end

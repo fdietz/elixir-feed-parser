@@ -100,7 +100,7 @@ defmodule ElixirFeedParser.Test.AtomTest do
   end
 
   test "parse updated", %{example1: feed} do
-    assert feed.updated == %{day: 13, hour: 18, min: 30, month: 12, sec: 2, usec: 0, year: 2003}
+    assert feed.updated == %DateTime{day: 13, hour: 18, minute: 30, month: 12, second: 2, microsecond: {0,0}, year: 2003, time_zone: "Etc/UTC", zone_abbr: "UTC", utc_offset: 0, std_offset: 0}
   end
 
   test "parse category", %{example1: feed} do

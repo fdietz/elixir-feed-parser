@@ -2,7 +2,7 @@ defmodule ElixirFeedParser.Parsers.RSS2 do
   import ElixirFeedParser.Parsers.Helper
   alias ElixirFeedParser.XmlNode
 
-  @date_format "{RFC1123}"
+  @date_format "RFC_1123"
 
   def can_parse?(xml) do
     xml

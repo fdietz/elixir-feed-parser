@@ -38,7 +38,7 @@ defmodule ElixirFeedParser.Test.RSS2Test do
   end
 
   test "parse updated", %{example1: feed} do
-    assert feed.updated == %{day: 20, hour: 12, min: 30, month: 10, sec: 0, usec: 0, year: 2015}
+    assert feed.updated == %DateTime{day: 20, hour: 12, minute: 30, month: 10, second: 0, microsecond: {0,0}, year: 2015, time_zone: "Etc/GMT+0", zone_abbr: "GMT", utc_offset: 0, std_offset: 0}
   end
 
   test "parse link as atom:link", %{example2: feed} do
