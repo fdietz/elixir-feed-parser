@@ -4,7 +4,7 @@ defmodule ElixirFeedParser.Mixfile do
   def project do
     [app: :elixir_feed_parser,
      version: "2.0.1",
-     elixir: "~> 1.6.2",
+     elixir: "~> 1.4",
      description: description(),
      package: package(),
      build_embedded: Mix.env == :prod,
