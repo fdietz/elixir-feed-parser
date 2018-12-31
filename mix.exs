@@ -31,7 +31,7 @@ defmodule ElixirFeedParser.Mixfile do
   defp deps do
     [
       {:timex, "~> 3.4"},
-      {:ex_doc, ">= 0.0.0", only: :dev}
+      {:ex_doc, "~> 0.19", only: :dev}
     ]
   end
 
