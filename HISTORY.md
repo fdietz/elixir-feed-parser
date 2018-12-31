@@ -1,3 +1,8 @@
+# 2.1.0 / 2018-12-31
+
+* feat: Add thumbnail field to RSS2 entry parsing (@kamciokodzi)
+* chore: upgrade timex v3.4
+
 # 2.0.0 / 2017-04-16
 
 * feat: update to latest elixir 1.4.1 and timex 3.1.13 
