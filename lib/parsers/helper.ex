@@ -1,6 +1,8 @@
 defmodule ElixirFeedParser.Parsers.Helper do
   alias ElixirFeedParser.XmlNode
 
+  require Logger
+
   def element(node, selector) do
     node |> XmlNode.find(selector) |> XmlNode.text
   end
@@ -25,8 +27,13 @@ defmodule ElixirFeedParser.Parsers.Helper do
         {:ok, date_time, _} = DateTime.from_iso8601(date_time_string)
         date_time
       "RFC_1123" -> 
-        {:ok, date_time} = Timex.parse(date_time_string, "{RFC1123}")
-        date_time
+        case Timex.parse(date_time_string, "{RFC1123}") do
+          {:ok, date_time} -> 
+            date_time
+          _ -> 
+            Logger.info("WARNING: unparsed date string (#{date_time_string})")
+            nil
+        end
     end
   end
 end
