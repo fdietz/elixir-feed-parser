@@ -6,7 +6,10 @@ defmodule ElixirFeedParser.Test.FeedburnerRSS2Test do
 
   setup do
     example1_file = File.read!("test/fixtures/rss2/TechCrunch.xml")
-    example1 = with {:ok, xml} <- XmlNode.parse_string(example1_file), do: FeedburnerRSS2.parse(xml)
+
+    example1 =
+      with {:ok, xml} <- XmlNode.parse_string(example1_file), do: FeedburnerRSS2.parse(xml)
+
     {:ok, [example1: example1]}
   end
 
@@ -17,11 +20,15 @@ defmodule ElixirFeedParser.Test.FeedburnerRSS2Test do
       <title>Example Feed</title>
     </rss>
     """
+
     {:ok, xml} = XmlNode.parse_string(sample_xml)
     assert FeedburnerRSS2.can_parse?(xml)
   end
 
   test "parse feed burner hub", %{example1: feed} do
-    assert feed.hubs == ["http://pubsubhubbub.appspot.com/", "http://techcrunch.com/?pushpress=hub"]
+    assert feed.hubs == [
+             "http://pubsubhubbub.appspot.com/",
+             "http://techcrunch.com/?pushpress=hub"
+           ]
   end
 end

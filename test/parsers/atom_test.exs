@@ -17,7 +17,16 @@ defmodule ElixirFeedParser.Test.AtomTest do
     example5 = with {:ok, xml} <- XmlNode.parse_string(example5_file), do: Atom.parse(xml)
     example6_file = File.read!("test/fixtures/atom/complex_the_verge_com.xml")
     example6 = with {:ok, xml} <- XmlNode.parse_string(example6_file), do: Atom.parse(xml)
-    {:ok, [example1: example1, example2: example2, example3: example3, example4: example4, example5: example5, example6: example6]}
+
+    {:ok,
+     [
+       example1: example1,
+       example2: example2,
+       example3: example3,
+       example4: example4,
+       example5: example5,
+       example6: example6
+     ]}
   end
 
   test "can_parse?" do
@@ -27,6 +36,7 @@ defmodule ElixirFeedParser.Test.AtomTest do
       <title>Example Feed</title>
     </feed>
     """
+
     {:ok, xml} = XmlNode.parse_string(sample_xml)
     assert Atom.can_parse?(xml)
   end
@@ -42,6 +52,7 @@ defmodule ElixirFeedParser.Test.AtomTest do
       <title>Example Feed</title>
     </feed>
     """
+
     {:ok, xml} = XmlNode.parse_string(sample_xml)
     assert Atom.can_parse?(xml)
   end
@@ -78,7 +89,9 @@ defmodule ElixirFeedParser.Test.AtomTest do
     assert feed.url == "http://feedjira.com/blog"
   end
 
-  test "parse the feed_url if it does not have the type='application/atom+xml' attribute", %{example3: feed} do
+  test "parse the feed_url if it does not have the type='application/atom+xml' attribute", %{
+    example3: feed
+  } do
     assert feed.feed_url == "http://www.innoq.com/planet/atom.xml"
   end
 
@@ -100,7 +113,19 @@ defmodule ElixirFeedParser.Test.AtomTest do
   end
 
   test "parse updated", %{example1: feed} do
-    assert feed.updated == %DateTime{day: 13, hour: 18, minute: 30, month: 12, second: 2, microsecond: {0,0}, year: 2003, time_zone: "Etc/UTC", zone_abbr: "UTC", utc_offset: 0, std_offset: 0}
+    assert feed.updated == %DateTime{
+             day: 13,
+             hour: 18,
+             minute: 30,
+             month: 12,
+             second: 2,
+             microsecond: {0, 0},
+             year: 2003,
+             time_zone: "Etc/UTC",
+             zone_abbr: "UTC",
+             utc_offset: 0,
+             std_offset: 0
+           }
   end
 
   test "parse category", %{example1: feed} do

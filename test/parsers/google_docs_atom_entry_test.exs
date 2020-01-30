@@ -6,7 +6,10 @@ defmodule ElixirFeedParser.Test.GoogleDocsAtomEntryTest do
 
   setup do
     example1_file = File.read!("test/fixtures/atom/GoogleDocsList.xml")
-    example1 = with {:ok, xml} <- XmlNode.parse_string(example1_file), do: GoogleDocsAtom.parse(xml)
+
+    example1 =
+      with {:ok, xml} <- XmlNode.parse_string(example1_file), do: GoogleDocsAtom.parse(xml)
+
     {:ok, [example1: List.first(example1.entries)]}
   end
 
