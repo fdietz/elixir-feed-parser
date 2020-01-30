@@ -11,9 +11,14 @@ defmodule ElixirFeedParser do
           :atom | :rss2 | :google_docs | :itunes | :feedburner_atom | :feedburner_rss2
 
   @spec parse(String.t(), parser()) :: {:ok | map()} | {:error, String.t()}
-  def parse(xml_string, parser) do
+  def parse(xml_string, parser_atom) do
     with {:ok, xml} <- XmlNode.parse_string(xml_string),
-         {:ok, parser} <- atom_to_parser(parser) do
+         {:ok, parser} <- atom_to_parser(parser_atom),
+         {:ok, parser} <-
+           if(parser.can_parse?(xml),
+             do: {:ok, parser},
+             else: {:error, "Cannot parse XML with parser #{parser}"}
+           ) do
       {:ok, parser.parse(xml)}
     end
   end
