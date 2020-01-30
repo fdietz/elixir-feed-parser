@@ -17,12 +17,17 @@ defmodule ElixirFeedParser.Test.AtomEntryTest do
     example5 = with {:ok, xml} <- XmlNode.parse_string(example5_file), do: Atom.parse(xml)
     example6_file = File.read!("test/fixtures/atom/heise.xml")
     example6 = with {:ok, xml} <- XmlNode.parse_string(example6_file), do: Atom.parse(xml)
-    {:ok, [example1: List.first(example1.entries), example2:
-        List.first(example2.entries), example3: List.first(example3.entries),
-        example4: List.first(example4.entries), example5:
-        List.first(example5.entries), example6: List.first(example6.entries)]}
-  end
 
+    {:ok,
+     [
+       example1: List.first(example1.entries),
+       example2: List.first(example2.entries),
+       example3: List.first(example3.entries),
+       example4: List.first(example4.entries),
+       example5: List.first(example5.entries),
+       example6: List.first(example6.entries)
+     ]}
+  end
 
   test "parse authors", %{example1: entry} do
     assert entry.authors == ["John Doe", "Ms. Penny"]
@@ -37,11 +42,35 @@ defmodule ElixirFeedParser.Test.AtomEntryTest do
   end
 
   test "parse updated", %{example1: entry} do
-    assert entry.updated == %DateTime{day: 10, hour: 12, minute: 30, month: 10, second: 0, microsecond: {0,0}, year: 2015, time_zone: "Etc/UTC", zone_abbr: "UTC", utc_offset: 0, std_offset: 0}
+    assert entry.updated == %DateTime{
+             day: 10,
+             hour: 12,
+             minute: 30,
+             month: 10,
+             second: 0,
+             microsecond: {0, 0},
+             year: 2015,
+             time_zone: "Etc/UTC",
+             zone_abbr: "UTC",
+             utc_offset: 0,
+             std_offset: 0
+           }
   end
 
   test "parse published", %{example1: entry} do
-    assert entry.published == %DateTime{day: 9, hour: 12, minute: 30, month: 10, second: 0, microsecond: {0,0}, year: 2015, time_zone: "Etc/UTC", zone_abbr: "UTC", utc_offset: 0, std_offset: 0}
+    assert entry.published == %DateTime{
+             day: 9,
+             hour: 12,
+             minute: 30,
+             month: 10,
+             second: 0,
+             microsecond: {0, 0},
+             year: 2015,
+             time_zone: "Etc/UTC",
+             zone_abbr: "UTC",
+             utc_offset: 0,
+             std_offset: 0
+           }
   end
 
   test "parse summary", %{example1: entry} do
@@ -69,7 +98,8 @@ defmodule ElixirFeedParser.Test.AtomEntryTest do
   end
 
   test "parse url", %{example2: entry} do
-    assert entry.url == "http://aws.typepad.com/aws/2009/01/aws-job-architect-designer-position-in-turkey.html"
+    assert entry.url ==
+             "http://aws.typepad.com/aws/2009/01/aws-job-architect-designer-position-in-turkey.html"
   end
 
   test "parse url if does not have type 'text/html' attribute", %{example3: entry} do
@@ -77,7 +107,8 @@ defmodule ElixirFeedParser.Test.AtomEntryTest do
   end
 
   test "parse content", %{example1: entry} do
-    assert entry.content == "Example content with <a href=\"bla\">link</a><p>my test <em>paragraph</em> is here.</p>"
+    assert entry.content ==
+             "Example content with <a href=\"bla\">link</a><p>my test <em>paragraph</em> is here.</p>"
   end
 
   test "parse content if xhtml", %{example6: entry} do

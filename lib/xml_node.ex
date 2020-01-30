@@ -1,11 +1,10 @@
 defmodule ElixirFeedParser.XmlNode do
-
   # see https://github.com/erlang/otp/blob/maint/lib/xmerl/include/xmerl.hrl
   # for Record definitions of xmlElement, xmlAttribute, xmlText
 
   def parse_string(xml_string, options \\ [quiet: true]) do
     try do
-      {doc, _misc} = xml_string |> :binary.bin_to_list |> :xmerl_scan.string(options)
+      {doc, _misc} = xml_string |> :binary.bin_to_list() |> :xmerl_scan.string(options)
       {:ok, doc}
     catch
       :exit, error ->
@@ -14,7 +13,7 @@ defmodule ElixirFeedParser.XmlNode do
   end
 
   def find(node, path) do
-    xpath(node, path) |> List.first
+    xpath(node, path) |> List.first()
   end
 
   def map_children(node, selector, callback) do
@@ -26,13 +25,18 @@ defmodule ElixirFeedParser.XmlNode do
   end
 
   def attr(nil, _name), do: nil
+
   def attr(node, name) do
     node |> xpath("./@#{name}") |> extract_attr
   end
 
   defp extract_attr(nil), do: nil
   defp extract_attr([]), do: nil
-  defp extract_attr([{:xmlAttribute, _name, _expanded_name, _nsinfo, _namespace, _parents, _pos, _language, value, _normalized}]) do
+
+  defp extract_attr([
+         {:xmlAttribute, _name, _expanded_name, _nsinfo, _namespace, _parents, _pos, _language,
+          value, _normalized}
+       ]) do
     List.to_string(value)
   end
 
@@ -42,28 +46,39 @@ defmodule ElixirFeedParser.XmlNode do
 
   defp extract_text(nil), do: nil
   defp extract_text([]), do: nil
+
   defp extract_text({:xmlText, _parents, _pos, _language, value, _type}) do
     List.to_string(value)
   end
+
   defp extract_text([head | tail]) do
     "#{extract_text(head)}#{extract_text(tail)}"
   end
 
   def xpath(nil, _path), do: nil
+
   def xpath(node, path) do
     :xmerl_xpath.string(to_char_list(path), node)
   end
 
   def namespace(nil), do: nil
-  def namespace({:xmlElement, _name, _expanded_name, _nsinfo, {:xmlNamespace, default, _nodes}, _parents, _pos, _attributes, _content, _language, _xmlbase, _elementdef}) do
+
+  def namespace(
+        {:xmlElement, _name, _expanded_name, _nsinfo, {:xmlNamespace, default, _nodes}, _parents,
+         _pos, _attributes, _content, _language, _xmlbase, _elementdef}
+      ) do
     Atom.to_string(default)
   end
 
-  def namespaces({:xmlElement, _name, _expanded_name, _nsinfo, {:xmlNamespace, _default, nodes}, _parents, _pos, _attributes, _content, _language, _xmlbase, _elementdef}) do
-    result = Enum.map(nodes, fn(n) ->
-      {key, value} = n;
-      {List.to_string(key), Atom.to_string(value)}
-    end)
+  def namespaces(
+        {:xmlElement, _name, _expanded_name, _nsinfo, {:xmlNamespace, _default, nodes}, _parents,
+         _pos, _attributes, _content, _language, _xmlbase, _elementdef}
+      ) do
+    result =
+      Enum.map(nodes, fn n ->
+        {key, value} = n
+        {List.to_string(key), Atom.to_string(value)}
+      end)
 
     Enum.into(result, Map.new())
   end

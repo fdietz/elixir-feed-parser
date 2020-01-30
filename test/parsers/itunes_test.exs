@@ -17,6 +17,7 @@ defmodule ElixirFeedParser.Test.ITunesRSS2Test do
       <title>Example Feed</title>
     </rss>
     """
+
     {:ok, xml} = XmlNode.parse_string(sample_xml)
     assert ITunesRSS2.can_parse?(xml)
   end
@@ -49,11 +50,11 @@ defmodule ElixirFeedParser.Test.ITunesRSS2Test do
   end
 
   test "parse summary", %{example1: feed} do
-    assert feed.itunes_summary == "All About Everything is a show about everything. Each week we dive into any subject known to man and talk about it as much as we can. Look for our Podcast in the iTunes Music Store"
+    assert feed.itunes_summary ==
+             "All About Everything is a show about everything. Each week we dive into any subject known to man and talk about it as much as we can. Look for our Podcast in the iTunes Music Store"
   end
 
   test "parse entries", %{example1: feed} do
     assert Enum.count(feed.entries) == 3
   end
-
 end
