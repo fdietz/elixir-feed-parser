@@ -6,19 +6,19 @@ defmodule XmlNodeTest do
   test "parsing an element with text" do
     sample_xml = "<title>test title</title>"
     {:ok, xml} = XmlNode.parse_string(sample_xml)
-    assert XmlNode.find(xml, "/title") |> XmlNode.text == "test title"
+    assert XmlNode.find(xml, "/title") |> XmlNode.text() == "test title"
   end
 
   test "parsing an element with colon name" do
     sample_xml = "<content:encoded>test title</content:encoded>"
     {:ok, xml} = XmlNode.parse_string(sample_xml)
-    assert XmlNode.find(xml, "/content:encoded") |> XmlNode.text == "test title"
+    assert XmlNode.find(xml, "/content:encoded") |> XmlNode.text() == "test title"
   end
 
   test "parsing an element with a CDATA section" do
     sample_xml = "<content><![CDATA[<div>Hello</div>]]></content>"
     {:ok, xml} = XmlNode.parse_string(sample_xml)
-    assert XmlNode.find(xml, "/content") |> XmlNode.text == "<div>Hello</div>"
+    assert XmlNode.find(xml, "/content") |> XmlNode.text() == "<div>Hello</div>"
   end
 
   # TODO: implement me
@@ -34,6 +34,7 @@ defmodule XmlNodeTest do
     sample_xml = """
     <content type="text">test</content>
     """
+
     {:ok, xml} = XmlNode.parse_string(sample_xml)
     assert XmlNode.find(xml, "/content") |> XmlNode.attr("type") == "text"
   end
@@ -46,8 +47,9 @@ defmodule XmlNodeTest do
       </author>
     </feed>
     """
+
     {:ok, xml} = XmlNode.parse_string(sample_xml)
-    assert XmlNode.find(xml, "/feed/author/name") |> XmlNode.text == "John Doe"
+    assert XmlNode.find(xml, "/feed/author/name") |> XmlNode.text() == "John Doe"
   end
 
   test "parsing xml namespace" do
@@ -55,6 +57,7 @@ defmodule XmlNodeTest do
     <feed xmlns="http://www.w3.org/2005/Atom">
     </feed>
     """
+
     {:ok, xml} = XmlNode.parse_string(sample_xml)
     assert XmlNode.find(xml, "/feed") |> XmlNode.namespace() == "http://www.w3.org/2005/Atom"
   end
@@ -70,9 +73,10 @@ defmodule XmlNodeTest do
       </entry>
     </feed>
     """
+
     {:ok, xml} = XmlNode.parse_string(sample_xml)
 
-    titles = XmlNode.map_children(xml, "entry/title", fn(e) -> XmlNode.text(e) end)
+    titles = XmlNode.map_children(xml, "entry/title", fn e -> XmlNode.text(e) end)
     assert titles == ["Example title 1", "Example title 2"]
   end
 
@@ -88,11 +92,12 @@ defmodule XmlNodeTest do
       </entry>
     </feed>
     """
+
     {:ok, xml} = XmlNode.parse_string(sample_xml)
 
     node = xml |> XmlNode.find("entry/content")
     content = XmlNode.element_to_string(node)
     {:ok, content_xml} = XmlNode.parse_string(content)
-    assert "This is a paragraph", content_xml |> XmlNode.find("p") |> XmlNode.text
+    assert "This is a paragraph", content_xml |> XmlNode.find("p") |> XmlNode.text()
   end
 end

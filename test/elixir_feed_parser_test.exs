@@ -8,7 +8,16 @@ defmodule ElixirFeedParserTest do
     example4 = File.read!("test/fixtures/rss2/itunes.xml")
     example5 = File.read!("test/fixtures/atom/PaulDixExplainsNothing.xml")
     example6 = File.read!("test/fixtures/rss2/TechCrunch.xml")
-    {:ok, [example1: example1, example2: example2, example3: example3, example4: example4, example5: example5, example6: example6]}
+
+    {:ok,
+     [
+       example1: example1,
+       example2: example2,
+       example3: example3,
+       example4: example4,
+       example5: example5,
+       example6: example6
+     ]}
   end
 
   test "parsing an Atom file", %{example1: xml} do
@@ -48,8 +57,8 @@ defmodule ElixirFeedParserTest do
       <title>Example Feed</title>
     </feed>
     """
+
     result = ElixirFeedParser.parse(sample_xml)
     assert {:error, :feed_format_unknown} == result
   end
-
 end
