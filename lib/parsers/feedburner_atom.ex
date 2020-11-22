@@ -1,8 +1,8 @@
 defmodule ElixirFeedParser.Parsers.FeedburnerAtom do
   import ElixirFeedParser.Parsers.Helper
 
-  alias ElixirFeedParser.XmlNode
   alias ElixirFeedParser.Parsers.Atom
+  alias ElixirFeedParser.XmlNode
 
   # TODO: implement me
   def can_parse?(xml) do

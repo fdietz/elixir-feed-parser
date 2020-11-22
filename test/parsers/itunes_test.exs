@@ -1,8 +1,8 @@
 defmodule ElixirFeedParser.Test.ITunesRSS2Test do
   use ExUnit.Case
 
-  alias ElixirFeedParser.XmlNode
   alias ElixirFeedParser.Parsers.ITunesRSS2
+  alias ElixirFeedParser.XmlNode
 
   setup do
     example1_file = File.read!("test/fixtures/rss2/itunes.xml")

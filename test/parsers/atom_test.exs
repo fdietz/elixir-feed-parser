@@ -1,8 +1,8 @@
 defmodule ElixirFeedParser.Test.AtomTest do
   use ExUnit.Case
 
-  alias ElixirFeedParser.XmlNode
   alias ElixirFeedParser.Parsers.Atom
+  alias ElixirFeedParser.XmlNode
 
   setup do
     example1_file = File.read!("test/fixtures/atom/example1.xml")
@@ -104,7 +104,7 @@ defmodule ElixirFeedParser.Test.AtomTest do
   end
 
   test "parse no hub urls", %{example2: feed} do
-    assert Enum.count(feed.hubs) == 0
+    assert Enum.empty?(feed.hubs)
   end
 
   test "parse the hub urls", %{example4: feed} do

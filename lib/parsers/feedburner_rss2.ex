@@ -1,7 +1,8 @@
 defmodule ElixirFeedParser.Parsers.FeedburnerRSS2 do
   import ElixirFeedParser.Parsers.Helper
-  alias ElixirFeedParser.XmlNode
+
   alias ElixirFeedParser.Parsers.RSS2
+  alias ElixirFeedParser.XmlNode
 
   # http://www.apple.com/itunes/whatson/podcasts/specs.html
   def can_parse?(xml) do

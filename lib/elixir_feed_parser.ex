@@ -1,11 +1,13 @@
 defmodule ElixirFeedParser do
-  alias ElixirFeedParser.XmlNode
+  @moduledoc false
+
   alias ElixirFeedParser.Parsers.Atom
-  alias ElixirFeedParser.Parsers.RSS2
-  alias ElixirFeedParser.Parsers.GoogleDocsAtom
-  alias ElixirFeedParser.Parsers.ITunesRSS2
   alias ElixirFeedParser.Parsers.FeedburnerAtom
   alias ElixirFeedParser.Parsers.FeedburnerRSS2
+  alias ElixirFeedParser.Parsers.GoogleDocsAtom
+  alias ElixirFeedParser.Parsers.ITunesRSS2
+  alias ElixirFeedParser.Parsers.RSS2
+  alias ElixirFeedParser.XmlNode
 
   def parse(xml_string) do
     with {:ok, xml} <- XmlNode.parse_string(xml_string),
