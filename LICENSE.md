@@ -1,6 +1,5 @@
-----------------------------------------------------------------------
 elixir-feed-parser is released under the MIT License
-Copyright (c) 2015 Frederik Dietz and contributors
+Copyright (c) 2015-present Frederik Dietz and contributors
 
 Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation
