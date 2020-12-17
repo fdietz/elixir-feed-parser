@@ -1,8 +1,8 @@
 defmodule ElixirFeedParser.Test.AtomEntryTest do
   use ExUnit.Case
 
-  alias ElixirFeedParser.XmlNode
   alias ElixirFeedParser.Parsers.Atom
+  alias ElixirFeedParser.XmlNode
 
   setup do
     example1_file = File.read!("test/fixtures/atom/example1.xml")
