@@ -1,8 +1,8 @@
 defmodule ElixirFeedParser.Parsers.GoogleDocsAtom do
   import ElixirFeedParser.Parsers.Helper
 
-  alias ElixirFeedParser.XmlNode
   alias ElixirFeedParser.Parsers.Atom
+  alias ElixirFeedParser.XmlNode
 
   def can_parse?(xml) do
     Atom.can_parse?(xml) && google_docs_namespace?(xml)

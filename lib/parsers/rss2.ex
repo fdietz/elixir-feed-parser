@@ -1,5 +1,6 @@
 defmodule ElixirFeedParser.Parsers.RSS2 do
   import ElixirFeedParser.Parsers.Helper
+
   alias ElixirFeedParser.XmlNode
 
   @date_format "RFC_1123"

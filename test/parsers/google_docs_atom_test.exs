@@ -1,8 +1,8 @@
 defmodule ElixirFeedParser.Test.GoogleDocsAtomTest do
   use ExUnit.Case
 
-  alias ElixirFeedParser.XmlNode
   alias ElixirFeedParser.Parsers.GoogleDocsAtom
+  alias ElixirFeedParser.XmlNode
 
   setup do
     example1_file = File.read!("test/fixtures/atom/GoogleDocsList.xml")
