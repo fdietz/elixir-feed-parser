@@ -1,5 +1,12 @@
 # Elixir Feed Parser
+
 [![Build Status](https://travis-ci.org/fdietz/elixir-feed-parser.svg?branch=master)](https://travis-ci.org/fdietz/elixir-feed-parser)
+[![Module Version](https://img.shields.io/hexpm/v/elixir_feed_parser.svg)](https://hex.pm/packages/elixir_feed_parser)
+[![Hex Docs](https://img.shields.io/badge/hex-docs-lightgreen.svg)](https://hexdocs.pm/elixir_feed_parser/)
+[![Total Download](https://img.shields.io/hexpm/dt/elixir_feed_parser.svg)](https://hex.pm/packages/elixir_feed_parser)
+[![License](https://img.shields.io/hexpm/l/elixir_feed_parser.svg)](https://github.com/fdietz/elixir-feed-parser/blob/master/LICENSE)
+[![Last Updated](https://img.shields.io/github/last-commit/fdietz/elixir-feed-parser.svg)](https://github.com/fdietz/elixir-feed-parser/commits/master)
+
 
 Elixir Atom/RSS Parser. Depends on Erlang's **xmerl** xml parser.
 
@@ -10,7 +17,7 @@ feeds.
 
 # Setup
 
-Add elixir-feed-parser to your mix dependencies and application.
+Add `:elixir-feed-parser` to your mix dependencies and application.
 
 ```elixir
 def application do
@@ -72,3 +79,7 @@ I'm new to Elixir and would love to get some feedback on how to improve this cod
 
 # Credits
 Since this is my first Elixir project I've taken lots of ideas from existing projects. In particular I'd like to mention [FeederEx](https://github.com/manukall/feeder_ex), [Feedme](https://github.com/umurgdk/elixir-feedme) and [Quinn](https://github.com/nhu313/Quinn).
+
+# License
+
+This source code is released under the MIT License. Copyright (c) 2015-present Frederik Dietz and contributors.
