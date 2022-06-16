@@ -3,7 +3,7 @@ defmodule ElixirFeedParser.Parsers.RSS2 do
 
   alias ElixirFeedParser.XmlNode
 
-  @date_format "RFC_1123"
+  @date_format ["RFC_1123", "ISO_8601"]
 
   def can_parse?(xml) do
     xml
@@ -63,9 +63,14 @@ defmodule ElixirFeedParser.Parsers.RSS2 do
       id: entry |> element("guid"),
       "rss2:guid": entry |> element("guid"),
       comments: entry |> element("comments"),
-      # TODO: also work with pubdate or publicationDate, dc:date, dc:Date, dcterms:created
-      updated: entry |> element("pubDate") |> to_date_time(@date_format),
-      "rss2:pubDate": entry |> element("pubDate") |> to_date_time(@date_format),
+      updated:
+        entry
+        |> element(["pubDate", "publicationDate", "dcterms:created", "dc:date", "dc:Date"])
+        |> to_date_time(@date_format),
+      "rss2:pubDate":
+        entry
+        |> element(["pubDate", "publicationDate", "dcterms:created", "dc:date", "dc:Date"])
+        |> to_date_time(@date_format),
       source: entry |> element("source", attr: "url"),
       content: entry |> element("content:encoded"),
       enclosure: entry |> XmlNode.find("enclosure") |> parse_enclosure

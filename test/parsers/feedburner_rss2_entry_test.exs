@@ -7,6 +7,7 @@ defmodule ElixirFeedParser.Test.FeedburnerRSS2EntryTest do
   setup do
     example1_file = File.read!("test/fixtures/rss2/TechCrunch.xml")
     example2_file = File.read!("test/fixtures/rss2/rsn_cnn.xml")
+    example3_file = File.read!("test/fixtures/rss2/iso_date_in_rss2.xml")
 
     example1 =
       with {:ok, xml} <- XmlNode.parse_string(example1_file), do: FeedburnerRSS2.parse(xml)
@@ -14,7 +15,15 @@ defmodule ElixirFeedParser.Test.FeedburnerRSS2EntryTest do
     example2 =
       with {:ok, xml} <- XmlNode.parse_string(example2_file), do: FeedburnerRSS2.parse(xml)
 
-    {:ok, [example1: List.first(example1.entries), example2: List.first(example2.entries)]}
+    example3 =
+      with {:ok, xml} <- XmlNode.parse_string(example3_file), do: FeedburnerRSS2.parse(xml)
+
+    {:ok,
+     [
+       example1: List.first(example1.entries),
+       example2: List.first(example2.entries),
+       example3: List.first(example3.entries)
+     ]}
   end
 
   test "parse feed burner origLink", %{example1: feed} do
@@ -25,5 +34,9 @@ defmodule ElixirFeedParser.Test.FeedburnerRSS2EntryTest do
   test "parse url for thumbnail", %{example2: feed} do
     assert feed."rss2:thumbnail" ==
              "http://i2.cdn.turner.com/money/dam/assets/170920161756-facebook-logo-wall-120x90.jpg"
+  end
+
+  test "parse iso date even in rss2 with dc:date", %{example3: feed} do
+    assert feed.updated == ~U[2022-06-15 16:11:00Z]
   end
 end
