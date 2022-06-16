@@ -65,11 +65,25 @@ defmodule ElixirFeedParser.Parsers.RSS2 do
       comments: entry |> element("comments"),
       updated:
         entry
-        |> element(["pubDate", "publicationDate", "dcterms:created", "dc:date", "dc:Date"])
+        |> element([
+          "pubDate",
+          "publicationDate",
+          "dcterms:created",
+          "dc:date",
+          "dc:Date",
+          "a10:updated"
+        ])
         |> to_date_time(@date_format),
       "rss2:pubDate":
         entry
-        |> element(["pubDate", "publicationDate", "dcterms:created", "dc:date", "dc:Date"])
+        |> element([
+          "pubDate",
+          "publicationDate",
+          "dcterms:created",
+          "dc:date",
+          "dc:Date",
+          "a10:updated"
+        ])
         |> to_date_time(@date_format),
       source: entry |> element("source", attr: "url"),
       content: entry |> element("content:encoded"),
