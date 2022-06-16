@@ -67,6 +67,7 @@ defmodule ElixirFeedParser.Parsers.RSS2 do
         entry
         |> element([
           "pubDate",
+          "pubdate",
           "publicationDate",
           "dcterms:created",
           "dc:date",
@@ -78,6 +79,7 @@ defmodule ElixirFeedParser.Parsers.RSS2 do
         entry
         |> element([
           "pubDate",
+          "pubdate",
           "publicationDate",
           "dcterms:created",
           "dc:date",
