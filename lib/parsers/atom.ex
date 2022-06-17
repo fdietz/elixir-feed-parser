@@ -3,8 +3,6 @@ defmodule ElixirFeedParser.Parsers.Atom do
 
   alias ElixirFeedParser.XmlNode
 
-  @date_format "ISO_8601"
-
   def can_parse?(xml) do
     xml
     |> XmlNode.find("/feed")
@@ -34,7 +32,7 @@ defmodule ElixirFeedParser.Parsers.Atom do
       # TODO: add optional scheme and label attributes
       categories: feed |> elements("category", attr: "term"),
       contributors: feed |> elements("contributor/name"),
-      updated: feed |> element("updated") |> to_date_time(@date_format),
+      updated: feed |> element("updated") |> to_date_time(),
       generator: feed |> element("generator", attr: "uri"),
       icon: feed |> element("icon"),
       logo: feed |> element("logo"),
@@ -63,8 +61,8 @@ defmodule ElixirFeedParser.Parsers.Atom do
       authors: entry |> elements("author/name"),
       id: entry |> element("id"),
       title: entry |> element("title"),
-      updated: entry |> element("updated") |> to_date_time(@date_format),
-      published: entry |> element("published") |> to_date_time(@date_format),
+      updated: entry |> element("updated") |> to_date_time(),
+      published: entry |> element("published") |> to_date_time(),
 
       # TODO: add optional scheme and label attributes
       categories: entry |> elements("category", attr: "term"),
